@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 interface ApiState<T> {
   data: T | null;
   loading: boolean;
-  error: string | null;
+  error: any;
 }
 
 export function useApi<T, P = any>(apiFunction: (params: P) => Promise<T>) {
@@ -21,8 +21,8 @@ export function useApi<T, P = any>(apiFunction: (params: P) => Promise<T>) {
       setState({ data: result, loading: false, error: null });
       return result;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred';
-      setState({ data: null, loading: false, error: errorMessage });
+      // Store the entire error object so we can access response data later
+      setState({ data: null, loading: false, error: error as any });
       throw error;
     }
   }, [apiFunction]);

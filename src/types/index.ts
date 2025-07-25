@@ -40,6 +40,10 @@ export interface JwtResponse {
     signature: string;
   };
   valid?: boolean;
+  success?: boolean;
+  error?: string;
+  errorCode?: string;
+  technicalError?: string;
 }
 
 // Jasypt types
