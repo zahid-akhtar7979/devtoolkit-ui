@@ -193,76 +193,31 @@ const ImageCompressorTool: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: '100%' }}>
+    <Box sx={{ p: 3 }}>
       {/* Header Section */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h3" fontWeight="bold" sx={{ 
-          mb: 2,
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text'
-        }}>
-          🗜️ Image Compressor
-        </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-          Reduce image size without losing much quality. Supports JPEG, PNG, and WebP formats with customizable compression settings.
-        </Typography>
-      </Box>
+      <Typography variant="h4" gutterBottom>
+        <CompressIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+        Image Compressor
+      </Typography>
+      
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+        Reduce image size without losing much quality. Supports JPEG, PNG, and WebP formats with customizable compression settings.
+      </Typography>
 
       {/* Configuration Panel */}
-      <Paper 
-        elevation={4} 
-        sx={{ 
-          mb: 3, 
-          p: 4, 
-          borderRadius: 4,
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-            pointerEvents: 'none'
-          }
-        }}
-      >
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-            <Box sx={{ 
-              width: 48, 
-              height: 48, 
-              borderRadius: '50%', 
-              bgcolor: 'rgba(255,255,255,0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px'
-            }}>
-              ⚙️
-            </Box>
-            <Box>
-              <Typography variant="h5" fontWeight="bold" sx={{ mb: 0.5 }}>
-                Compression Settings
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                Adjust quality and dimensions for optimal compression
-              </Typography>
-            </Box>
-          </Box>
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            <CompressIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+            Compression Settings
+          </Typography>
           
-          <Grid container spacing={4}>
+          <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>🎛️ Quality & Format</Typography>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>Quality & Format</Typography>
               
               <Box sx={{ mb: 3 }}>
-                <Typography variant="body2" sx={{ mb: 1, opacity: 0.9 }}>
+                <Typography variant="body2" sx={{ mb: 1 }}>
                   Quality: {quality}%
                 </Typography>
                 <Slider
@@ -271,39 +226,15 @@ const ImageCompressorTool: React.FC = () => {
                   min={10}
                   max={100}
                   step={5}
-                  sx={{
-                    color: '#ffd700',
-                    '& .MuiSlider-thumb': {
-                      backgroundColor: '#ffd700',
-                    },
-                    '& .MuiSlider-track': {
-                      backgroundColor: '#ffd700',
-                    },
-                    '& .MuiSlider-rail': {
-                      backgroundColor: 'rgba(255,255,255,0.3)',
-                    },
-                  }}
                 />
               </Box>
 
               <FormControl fullWidth sx={{ mb: 2 }}>
-                <InputLabel sx={{ color: 'rgba(255,255,255,0.8)' }}>Output Format</InputLabel>
+                <InputLabel>Output Format</InputLabel>
                 <Select
                   value={format}
                   label="Output Format"
                   onChange={(e) => setFormat(e.target.value)}
-                  sx={{
-                    color: 'white',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'rgba(255,255,255,0.5)',
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'rgba(255,255,255,0.8)',
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#ffd700',
-                    },
-                  }}
                 >
                   {supportedFormats.map((fmt) => (
                     <MenuItem key={fmt} value={fmt}>
@@ -315,10 +246,10 @@ const ImageCompressorTool: React.FC = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>📐 Dimensions</Typography>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>Dimensions</Typography>
               
               <Box sx={{ mb: 3 }}>
-                <Typography variant="body2" sx={{ mb: 1, opacity: 0.9 }}>
+                <Typography variant="body2" sx={{ mb: 1 }}>
                   Max Width: {maxWidth}px
                 </Typography>
                 <Slider
@@ -327,17 +258,11 @@ const ImageCompressorTool: React.FC = () => {
                   min={480}
                   max={4096}
                   step={32}
-                  sx={{
-                    color: '#ffd700',
-                    '& .MuiSlider-thumb': { backgroundColor: '#ffd700' },
-                    '& .MuiSlider-track': { backgroundColor: '#ffd700' },
-                    '& .MuiSlider-rail': { backgroundColor: 'rgba(255,255,255,0.3)' },
-                  }}
                 />
               </Box>
 
               <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" sx={{ mb: 1, opacity: 0.9 }}>
+                <Typography variant="body2" sx={{ mb: 1 }}>
                   Max Height: {maxHeight}px
                 </Typography>
                 <Slider
@@ -346,28 +271,20 @@ const ImageCompressorTool: React.FC = () => {
                   min={360}
                   max={4096}
                   step={32}
-                  sx={{
-                    color: '#ffd700',
-                    '& .MuiSlider-thumb': { backgroundColor: '#ffd700' },
-                    '& .MuiSlider-track': { backgroundColor: '#ffd700' },
-                    '& .MuiSlider-rail': { backgroundColor: 'rgba(255,255,255,0.3)' },
-                  }}
                 />
               </Box>
             </Grid>
           </Grid>
-        </Box>
-      </Paper>
+        </CardContent>
+      </Card>
 
       {/* Upload Section */}
-      <Card sx={{ mb: 3, borderRadius: 3, elevation: 3 }}>
-        <CardContent sx={{ p: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-            <ImageIcon sx={{ fontSize: '32px', color: 'primary.main' }} />
-            <Typography variant="h5" fontWeight="bold" color="primary">
-              Upload Images
-            </Typography>
-          </Box>
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            <ImageIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+            Upload Images
+          </Typography>
 
           <input
             type="file"
@@ -378,12 +295,12 @@ const ImageCompressorTool: React.FC = () => {
             style={{ display: 'none' }}
           />
 
-          <Paper
+          <Box
             sx={{
-              p: 4,
-              textAlign: 'center',
               border: '2px dashed #ccc',
               borderRadius: 2,
+              p: 4,
+              textAlign: 'center',
               cursor: 'pointer',
               mb: 3,
               '&:hover': {
@@ -393,14 +310,14 @@ const ImageCompressorTool: React.FC = () => {
             }}
             onClick={() => fileInputRef.current?.click()}
           >
-            <CloudUploadIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+            <CloudUploadIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
             <Typography variant="h6" gutterBottom>
               Click to select images or drag and drop
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Supports JPEG, PNG, WebP • Max {maxFileSizeMB}MB per file
             </Typography>
-          </Paper>
+          </Box>
 
           {selectedFiles.length > 0 && (
             <Box sx={{ mb: 3 }}>
@@ -456,42 +373,29 @@ const ImageCompressorTool: React.FC = () => {
 
       {/* Results Section */}
       {compressedImages.length > 0 && (
-        <Paper sx={{ 
-          borderRadius: 3, 
-          overflow: 'hidden',
-          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-          border: '1px solid #dee2e6',
-          elevation: 3
-        }}>
-          <Box sx={{ 
-            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)', 
-            color: 'white', 
-            textAlign: 'center', 
-            py: 2 
-          }}>
-            <Typography variant="h5" fontWeight="bold">
-              🎉 Compression Results
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Compression Results
             </Typography>
             {(() => {
               const { originalTotal, compressedTotal, totalSavings } = getTotalSavings();
               return (
-                <Typography variant="body1" sx={{ mt: 1, opacity: 0.9 }}>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
                   Total savings: {formatFileSize(originalTotal - compressedTotal)} ({totalSavings.toFixed(1)}% reduction)
                 </Typography>
               );
             })()}
-          </Box>
-          
-          <Box sx={{ p: 4 }}>
+            
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h6">
+              <Typography variant="subtitle1">
                 Compressed Images ({compressedImages.length})
               </Typography>
               <Button
                 variant="contained"
                 startIcon={<DownloadIcon />}
                 onClick={handleDownloadAll}
-                color="success"
+                color="primary"
               >
                 Download All
               </Button>
@@ -500,8 +404,8 @@ const ImageCompressorTool: React.FC = () => {
             <Grid container spacing={3}>
               {compressedImages.map((img, index) => (
                 <Grid item xs={12} md={6} lg={4} key={index}>
-                  <Card sx={{ p: 2 }}>
-                    <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                  <Card variant="outlined" sx={{ p: 2 }}>
+                    <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
                       {img.originalFile.name}
                     </Typography>
                     
@@ -546,9 +450,26 @@ const ImageCompressorTool: React.FC = () => {
                 </Grid>
               ))}
             </Grid>
-          </Box>
-        </Paper>
+          </CardContent>
+        </Card>
       )}
+
+      {/* Help */}
+      <Card sx={{ bgcolor: 'action.hover' }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            How to use:
+          </Typography>
+          <Typography component="div" variant="body2">
+            <ol style={{ paddingLeft: 20, margin: 0 }}>
+              <li>Adjust quality and dimension settings for optimal compression</li>
+              <li>Upload multiple images by clicking "Choose Files"</li>
+              <li>Click "Compress Images" to process all files</li>
+              <li>Download individual images or use "Download All" for batch download</li>
+            </ol>
+          </Typography>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

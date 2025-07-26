@@ -13,6 +13,7 @@ import {
   Paper,
   Chip,
 } from '@mui/material';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { utilityService } from '../../services/utilityService';
 import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
@@ -81,7 +82,7 @@ balance: 2150.25`;
   const handleXmlSample = () => {
     const sampleXML = `<?xml version="1.0" encoding="UTF-8"?>
 <person>
-  <name>Bob Johnson</name>
+  <n>Bob Johnson</n>
   <age>35</age>
   <email>bob@example.com</email>
   <address>
@@ -113,69 +114,24 @@ balance: 2150.25`;
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: '100%' }}>
+    <Box sx={{ p: 3 }}>
       {/* Header Section */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h3" fontWeight="bold" sx={{ 
-          mb: 2,
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text'
-        }}>
-          🔄 Format Converter
-        </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-          Convert between JSON, YAML, and XML formats with ease. Supports bidirectional conversion and pretty formatting.
-        </Typography>
-      </Box>
+      <Typography variant="h4" gutterBottom>
+        <SwapHorizIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+        Format Converter
+      </Typography>
+      
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+        Convert between JSON, YAML, and XML formats with ease. Supports bidirectional conversion and pretty formatting.
+      </Typography>
 
       {/* Configuration Panel */}
-      <Paper 
-        elevation={4} 
-        sx={{ 
-          mb: 3, 
-          p: 4, 
-          borderRadius: 4,
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-            pointerEvents: 'none'
-          }
-        }}
-      >
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-            <Box sx={{ 
-              width: 48, 
-              height: 48, 
-              borderRadius: '50%', 
-              bgcolor: 'rgba(255,255,255,0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px'
-            }}>
-              ⚙️
-            </Box>
-            <Box>
-              <Typography variant="h5" fontWeight="bold" sx={{ mb: 0.5 }}>
-                Conversion Settings
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                Select source and target formats for conversion
-              </Typography>
-            </Box>
-          </Box>
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            <SwapHorizIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+            Conversion Settings
+          </Typography>
           
           <Box sx={{ 
             display: 'flex', 
@@ -185,33 +141,16 @@ balance: 2150.25`;
           }}>
             {/* Format Selection */}
             <Box sx={{ flex: 1 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, opacity: 0.95 }}>
-                🎛️ Format Selection
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                Format Selection
               </Typography>
-              <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', alignItems: 'center' }}>
                 <FormControl sx={{ minWidth: 140 }}>
-                  <InputLabel sx={{ color: 'rgba(255,255,255,0.8)', '&.Mui-focused': { color: '#ffd700' } }}>
-                    From Format
-                  </InputLabel>
+                  <InputLabel>From Format</InputLabel>
                   <Select
                     value={sourceFormat}
                     label="From Format"
                     onChange={(e) => setSourceFormat(e.target.value)}
-                    sx={{
-                      color: 'white',
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255,255,255,0.5)',
-                      },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255,255,255,0.8)',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#ffd700',
-                      },
-                      '& .MuiSvgIcon-root': {
-                        color: 'rgba(255,255,255,0.8)',
-                      }
-                    }}
                   >
                     <MenuItem value="JSON">{getFormatIcon('JSON')} JSON</MenuItem>
                     <MenuItem value="YAML">{getFormatIcon('YAML')} YAML</MenuItem>
@@ -219,39 +158,14 @@ balance: 2150.25`;
                   </Select>
                 </FormControl>
 
-                <Box sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  fontSize: '24px',
-                  mt: 2
-                }}>
-                  ➡️
-                </Box>
+                <SwapHorizIcon sx={{ fontSize: '24px', color: 'text.secondary' }} />
 
                 <FormControl sx={{ minWidth: 140 }}>
-                  <InputLabel sx={{ color: 'rgba(255,255,255,0.8)', '&.Mui-focused': { color: '#ffd700' } }}>
-                    To Format
-                  </InputLabel>
+                  <InputLabel>To Format</InputLabel>
                   <Select
                     value={targetFormat}
                     label="To Format"
                     onChange={(e) => setTargetFormat(e.target.value)}
-                    sx={{
-                      color: 'white',
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255,255,255,0.5)',
-                      },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'rgba(255,255,255,0.8)',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#ffd700',
-                      },
-                      '& .MuiSvgIcon-root': {
-                        color: 'rgba(255,255,255,0.8)',
-                      }
-                    }}
                   >
                     <MenuItem value="JSON">{getFormatIcon('JSON')} JSON</MenuItem>
                     <MenuItem value="YAML">{getFormatIcon('YAML')} YAML</MenuItem>
@@ -263,91 +177,46 @@ balance: 2150.25`;
             
             {/* Sample Data */}
             <Box sx={{ 
-              borderLeft: { xs: 'none', md: '1px solid rgba(255,255,255,0.3)' },
-              borderTop: { xs: '1px solid rgba(255,255,255,0.3)', md: 'none' },
+              borderLeft: { xs: 'none', md: '1px solid #e0e0e0' },
+              borderTop: { xs: '1px solid #e0e0e0', md: 'none' },
               pl: { xs: 0, md: 4 },
               pt: { xs: 3, md: 0 },
               minWidth: { md: '300px' }
             }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, opacity: 0.95 }}>
-                🎯 Quick Start Samples
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                Quick Start Samples
               </Typography>
               <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
                 <Chip
-                  label="🗂️ JSON Sample"
+                  label="JSON Sample"
                   onClick={handleJsonSample}
                   variant="outlined"
-                  sx={{ 
-                    color: 'white',
-                    borderColor: 'rgba(255,255,255,0.5)',
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    px: 2,
-                    py: 0.5,
-                    '&:hover': { 
-                      bgcolor: 'rgba(255,255,255,0.15)',
-                      borderColor: 'rgba(255,255,255,0.8)',
-                      transform: 'translateY(-1px)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                    },
-                    transition: 'all 0.2s ease'
-                  }}
+                  clickable
                 />
                 <Chip
-                  label="📄 YAML Sample"
+                  label="YAML Sample"
                   onClick={handleYamlSample}
                   variant="outlined"
-                  sx={{ 
-                    color: 'white',
-                    borderColor: 'rgba(255,255,255,0.5)',
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    px: 2,
-                    py: 0.5,
-                    '&:hover': { 
-                      bgcolor: 'rgba(255,255,255,0.15)',
-                      borderColor: 'rgba(255,255,255,0.8)',
-                      transform: 'translateY(-1px)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                    },
-                    transition: 'all 0.2s ease'
-                  }}
+                  clickable
                 />
                 <Chip
-                  label="🏷️ XML Sample"
+                  label="XML Sample"
                   onClick={handleXmlSample}
                   variant="outlined"
-                  sx={{ 
-                    color: 'white',
-                    borderColor: 'rgba(255,255,255,0.5)',
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    px: 2,
-                    py: 0.5,
-                    '&:hover': { 
-                      bgcolor: 'rgba(255,255,255,0.15)',
-                      borderColor: 'rgba(255,255,255,0.8)',
-                      transform: 'translateY(-1px)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                    },
-                    transition: 'all 0.2s ease'
-                  }}
+                  clickable
                 />
               </Box>
             </Box>
           </Box>
-        </Box>
-      </Paper>
+        </CardContent>
+      </Card>
 
       {/* Input Section */}
-      <Card sx={{ mb: 3, borderRadius: 3, elevation: 3 }}>
-        <CardContent sx={{ p: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-            <Box sx={{ fontSize: '24px' }}>{getFormatIcon(sourceFormat)}</Box>
-            <Typography variant="h5" fontWeight="bold" color="primary">
-              Input ({sourceFormat})
-            </Typography>
-          </Box>
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            {getFormatIcon(sourceFormat)} Input ({sourceFormat})
+          </Typography>
 
           <TextField
             fullWidth
@@ -369,18 +238,11 @@ balance: 2150.25`;
 
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             <LoadingButton
-              variant="outlined"
+              variant="contained"
               loading={converterApi.loading}
               onClick={handleConvert}
               disabled={!validation.isNotEmpty(input)}
-              sx={{
-                borderRadius: 3, px: 4, py: 1.5,
-                borderColor: '#6c757d !important', borderWidth: '1px !important',
-                color: '#6c757d !important', backgroundColor: 'transparent !important',
-                '&:hover': { borderColor: '#5a6268 !important', borderWidth: '1px !important', color: '#5a6268 !important', bgcolor: 'rgba(108, 117, 125, 0.04) !important' },
-                '&:disabled': { borderColor: '#6c757d !important', borderWidth: '1px !important', color: '#6c757d !important', backgroundColor: 'transparent !important', opacity: 0.6 },
-                '&.Mui-disabled': { borderColor: '#6c757d !important', color: '#6c757d !important' }
-              }}
+              sx={{ px: 4, py: 1.5 }}
             >
               {sourceFormat === targetFormat ? `Format ${sourceFormat}` : `Convert to ${targetFormat}`}
             </LoadingButton>
@@ -388,14 +250,7 @@ balance: 2150.25`;
               variant="outlined"
               loading={false}
               onClick={handleClear}
-              sx={{
-                borderRadius: 3, px: 4, py: 1.5,
-                borderColor: '#6c757d !important', borderWidth: '1px !important',
-                color: '#6c757d !important', backgroundColor: 'transparent !important',
-                '&:hover': { borderColor: '#5a6268 !important', borderWidth: '1px !important', color: '#5a6268 !important', bgcolor: 'rgba(108, 117, 125, 0.04) !important' },
-                '&:disabled': { borderColor: '#6c757d !important', borderWidth: '1px !important', color: '#6c757d !important', backgroundColor: 'transparent !important', opacity: 0.6 },
-                '&.Mui-disabled': { borderColor: '#6c757d !important', color: '#6c757d !important' }
-              }}
+              sx={{ px: 4, py: 1.5 }}
             >
               Clear All
             </LoadingButton>
@@ -411,38 +266,43 @@ balance: 2150.25`;
 
       {/* Result Section */}
       {converterApi.data && (
-        <Paper sx={{ 
-          borderRadius: 3, 
-          overflow: 'hidden',
-          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-          border: '1px solid #dee2e6',
-          elevation: 3
-        }}>
-          <Box sx={{ 
-            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)', 
-            color: 'white', 
-            textAlign: 'center', 
-            py: 2 
-          }}>
-            <Typography variant="h5" fontWeight="bold">
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
               {getFormatIcon(targetFormat)} Converted {targetFormat}
             </Typography>
-          </Box>
-                     <Box sx={{ 
-             p: 4,
-             '& .MuiTypography-root': {
-               fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
-               fontSize: '14px',
-               lineHeight: 1.5,
-             }
-           }}>
-             <ResultCard
-               title=""
-               content={converterApi.data.converted || 'No result'}
-             />
-           </Box>
-        </Paper>
+            <Box sx={{ 
+              '& .MuiTypography-root': {
+                fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+                fontSize: '14px',
+                lineHeight: 1.5,
+              }
+            }}>
+              <ResultCard
+                title=""
+                content={converterApi.data.converted || 'No result'}
+              />
+            </Box>
+          </CardContent>
+        </Card>
       )}
+
+      {/* Help */}
+      <Card sx={{ bgcolor: 'action.hover' }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            How to use:
+          </Typography>
+          <Typography component="div" variant="body2">
+            <ol style={{ paddingLeft: 20, margin: 0 }}>
+              <li>Select the source format (JSON, YAML, or XML)</li>
+              <li>Choose the target format you want to convert to</li>
+              <li>Paste your content or use a sample to get started</li>
+              <li>Click "Convert" to transform your data</li>
+            </ol>
+          </Typography>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

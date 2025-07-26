@@ -52,10 +52,10 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   },
   {
     id: 'image',
-    label: 'Image',
+    label: 'Image Converter',
     path: '/image',
     icon: 'Image',
-    description: 'Upload, preview, and convert images'
+    description: 'Convert images to Base64 and vice versa'
   },
   {
     id: 'regex',
@@ -78,13 +78,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     icon: 'Compare',
     description: 'Advanced text comparison with multiple algorithms'
   },
-  {
-    id: 'pdf-merger',
-    label: 'PDF Merger',
-    path: '/pdf-merger',
-    icon: 'PictureAsPdf',
-    description: 'Merge multiple PDFs into a single document'
-  },
+
   {
     id: 'cron',
     label: 'CRON',
@@ -97,7 +91,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     label: 'Image Compressor',
     path: '/compressor',
     icon: 'Compress',
-    description: 'Reduce image size without losing much quality'
+    description: 'Reduce photo file size without losing quality'
   },
   {
     id: 'sql',
@@ -105,6 +99,20 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     path: '/sql',
     icon: 'Storage',
     description: 'Format and beautify SQL queries'
+  },
+  {
+    id: 'image-to-pdf',
+    label: 'Photos to PDF',
+    path: '/image-to-pdf',
+    icon: 'PictureAsPdf',
+    description: 'Convert photos to PDF documents with drag & drop reordering'
+  },
+  {
+    id: 'pdf-merger',
+    label: 'PDF Combiner',
+    path: '/pdf-merger',
+    icon: 'Merge',
+    description: 'Combine multiple PDF files into one document'
   }
 ];
 

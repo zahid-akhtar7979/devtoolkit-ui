@@ -20,7 +20,6 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-
 } from '@mui/material';
 import { ExpandMore, Help, CheckCircle, Error, Info } from '@mui/icons-material';
 import { jwtService } from '../../services/jwtService';
@@ -29,6 +28,7 @@ import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
 import { getJwtErrorInfo, getJwtValidationTips } from '../../utils/jwtErrorHandling';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 
 const JwtTool: React.FC = () => {
   const [token, setToken] = useState('');

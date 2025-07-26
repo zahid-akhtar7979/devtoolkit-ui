@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,6 +12,7 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 
 const Base64Tool: React.FC = () => {
   const [text, setText] = useState('');
@@ -46,61 +43,58 @@ const Base64Tool: React.FC = () => {
   const result = currentApi.data;
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Base64 Encoder/Decoder
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Operation</InputLabel>
-            <Select
-              value={operation}
-              label="Operation"
-              onChange={(e) => setOperation(e.target.value)}
-            >
-              <MenuItem value="encode">Encode</MenuItem>
-              <MenuItem value="decode">Decode</MenuItem>
-            </Select>
-          </FormControl>
+    <ProfessionalToolLayout 
+      title="Base64 Encoder/Decoder"
+      description="Encode text to Base64 format or decode Base64 strings back to plain text"
+    >
+      <ProfessionalCard title="Input">
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Operation</InputLabel>
+          <Select
+            value={operation}
+            label="Operation"
+            onChange={(e) => setOperation(e.target.value)}
+          >
+            <MenuItem value="encode">Encode</MenuItem>
+            <MenuItem value="decode">Decode</MenuItem>
+          </Select>
+        </FormControl>
 
-          <TextField
-            fullWidth
-            multiline
-            rows={6}
-            label={`Text to ${operation}`}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder={operation === 'encode' ? 'Enter text to encode...' : 'Enter Base64 string to decode...'}
-            sx={{ mb: 2 }}
-          />
+        <TextField
+          fullWidth
+          multiline
+          rows={6}
+          label={`Text to ${operation}`}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder={operation === 'encode' ? 'Enter text to encode...' : 'Enter Base64 string to decode...'}
+          sx={{ mb: 2 }}
+        />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <LoadingButton
-              variant="contained"
-              loading={currentApi.loading}
-              onClick={handleProcess}
-              disabled={!validation.isNotEmpty(text)}
-            >
-              {operation === 'encode' ? 'Encode' : 'Decode'}
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleClear}
-            >
-              Clear
-            </LoadingButton>
-          </Box>
+        <ProfessionalButtonGroup>
+          <LoadingButton
+            variant="contained"
+            loading={currentApi.loading}
+            onClick={handleProcess}
+            disabled={!validation.isNotEmpty(text)}
+          >
+            {operation === 'encode' ? 'Encode' : 'Decode'}
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleClear}
+          >
+            Clear
+          </LoadingButton>
+        </ProfessionalButtonGroup>
 
-          {currentApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {currentApi.error}
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
+        {currentApi.error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {currentApi.error}
+          </Alert>
+        )}
+      </ProfessionalCard>
 
       {result && (
         <ResultCard
@@ -108,7 +102,7 @@ const Base64Tool: React.FC = () => {
           content={operation === 'encode' ? result.encoded || '' : result.decoded || ''}
         />
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 

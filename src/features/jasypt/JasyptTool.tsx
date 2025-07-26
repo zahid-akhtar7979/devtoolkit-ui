@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,6 +12,7 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 
 const JasyptTool: React.FC = () => {
   const [text, setText] = useState('');
@@ -49,14 +46,12 @@ const JasyptTool: React.FC = () => {
   const result = currentApi.data;
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Jasypt Encryption/Decryption
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+    <ProfessionalToolLayout 
+      title="Jasypt Encryption/Decryption"
+      description="Encrypt and decrypt text using Jasypt with various algorithms"
+    >
+      <ProfessionalCard title="Input">
+        <ProfessionalButtonGroup sx={{ mb: 2 }}>
             <FormControl sx={{ minWidth: 200 }}>
               <InputLabel>Operation</InputLabel>
               <Select
@@ -82,7 +77,7 @@ const JasyptTool: React.FC = () => {
                 <MenuItem value="PBEWithSHA1AndAES_256">PBEWithSHA1AndAES_256</MenuItem>
               </Select>
             </FormControl>
-          </Box>
+          </ProfessionalButtonGroup>
 
           <TextField
             fullWidth
@@ -105,7 +100,7 @@ const JasyptTool: React.FC = () => {
             sx={{ mb: 2 }}
           />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+          <ProfessionalButtonGroup>
             <LoadingButton
               variant="contained"
               loading={currentApi.loading}
@@ -121,15 +116,14 @@ const JasyptTool: React.FC = () => {
             >
               Clear
             </LoadingButton>
-          </Box>
+          </ProfessionalButtonGroup>
 
           {currentApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" sx={{ mt: 2 }}>
               {currentApi.error}
             </Alert>
-          )}
-        </CardContent>
-      </Card>
+        )}
+      </ProfessionalCard>
 
       {result && (
         <ResultCard
@@ -137,7 +131,7 @@ const JasyptTool: React.FC = () => {
           content={operation === 'encrypt' ? result.encrypted || '' : result.decrypted || ''}
         />
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 
