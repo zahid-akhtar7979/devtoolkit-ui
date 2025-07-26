@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -24,12 +25,12 @@
     "axios": "^1.4.0",
     "jwt-decode": "^3.1.2",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.8.69",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.3.8",
     "react-pdf": "^10.0.1",
-    "react-router-dom": "^6.11.1",
-    "react-sortable-hoc": "^2.0.0"
+    "react-router-dom": "^6.11.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.6",
