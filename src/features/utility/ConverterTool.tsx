@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -15,7 +19,6 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
-import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 
 const ConverterTool: React.FC = () => {
   const [input, setInput] = useState('');
@@ -111,8 +114,7 @@ balance: 2150.25`;
   };
 
   return (
-    <ProfessionalToolLayout 
-      title="
+    <Box sx={{ p: 3 }}>
       {/* Header Section */}
       <Typography variant="h4" gutterBottom>
         <SwapHorizIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
@@ -125,7 +127,7 @@ balance: 2150.25`;
 
       {/* Configuration Panel */}
       <Card sx={{ mb: 3 }}>
-        
+        <CardContent>
           <Typography variant="h6" gutterBottom>
             <SwapHorizIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
             Conversion Settings
@@ -170,8 +172,8 @@ balance: 2150.25`;
                     <MenuItem value="XML">{getFormatIcon('XML')} XML</MenuItem>
                   </Select>
                 </FormControl>
-              </ProfessionalButtonGroup>
-            </ProfessionalButtonGroup>
+              </Box>
+            </Box>
             
             {/* Sample Data */}
             <Box sx={{ 
@@ -203,15 +205,15 @@ balance: 2150.25`;
                   variant="outlined"
                   clickable
                 />
-              </ProfessionalButtonGroup>
-            </ProfessionalButtonGroup>
-          </ProfessionalButtonGroup>
-        
-      </ProfessionalCard>
+              </Box>
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
 
       {/* Input Section */}
       <Card sx={{ mb: 3 }}>
-        
+        <CardContent>
           <Typography variant="h6" gutterBottom>
             {getFormatIcon(sourceFormat)} Input ({sourceFormat})
           </Typography>
@@ -252,20 +254,20 @@ balance: 2150.25`;
             >
               Clear All
             </LoadingButton>
-          </ProfessionalButtonGroup>
+          </Box>
 
           {converterApi.error && (
             <Alert severity="error" sx={{ mt: 2 }}>
               {converterApi.error}
             </Alert>
           )}
-        
-      </ProfessionalCard>
+        </CardContent>
+      </Card>
 
       {/* Result Section */}
       {converterApi.data && (
         <Card sx={{ mb: 3 }}>
-          
+          <CardContent>
             <Typography variant="h6" gutterBottom>
               {getFormatIcon(targetFormat)} Converted {targetFormat}
             </Typography>
@@ -280,14 +282,14 @@ balance: 2150.25`;
                 title=""
                 content={converterApi.data.converted || 'No result'}
               />
-            </ProfessionalButtonGroup>
-          
-        </ProfessionalCard>
+            </Box>
+          </CardContent>
+        </Card>
       )}
 
       {/* Help */}
       <Card sx={{ bgcolor: 'action.hover' }}>
-        
+        <CardContent>
           <Typography variant="h6" gutterBottom>
             How to use:
           </Typography>
@@ -299,9 +301,9 @@ balance: 2150.25`;
               <li>Click "Convert" to transform your data</li>
             </ol>
           </Typography>
-        
-      </ProfessionalCard>
-    </ProfessionalButtonGroup>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

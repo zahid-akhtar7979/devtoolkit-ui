@@ -40,14 +40,11 @@ const SqlTool: React.FC = () => {
 
   return (
     <ProfessionalToolLayout 
-      title="
-      SQL Formatter
-      "
-      "
+      title="SQL Formatter"
+      description="Format SQL queries with proper indentation and syntax highlighting"
     >
       <ProfessionalCard title="Input">
-        
-          <FormControl fullWidth sx={{ mb: 2 }}>
+        <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>SQL Dialect</InputLabel>
             <Select
               value={dialect}
@@ -102,8 +99,7 @@ const SqlTool: React.FC = () => {
             <Alert severity="error" sx={{ mt: 2 }}>
               {sqlApi.error}
             </Alert>
-          )}
-        
+        )}
       </ProfessionalCard>
 
       {sqlApi.data && (
@@ -112,7 +108,7 @@ const SqlTool: React.FC = () => {
           content={sqlApi.data.formatted || 'No formatted SQL'}
         />
       )}
-    </ProfessionalButtonGroup>
+    </ProfessionalToolLayout>
   );
 };
 

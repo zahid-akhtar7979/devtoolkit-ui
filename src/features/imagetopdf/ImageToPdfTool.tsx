@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import {
-  BoxContent,
+  Box,
+  Card,
+  CardContent,
+  Typography,
   Button,
   FormControl,
   InputLabel,
@@ -185,8 +188,7 @@ const ImageToPdfTool: React.FC = () => {
   }, []);
 
   return (
-    <ProfessionalToolLayout 
-      title="
+    <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
         <ImageIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
         Image to PDF Converter
@@ -198,7 +200,7 @@ const ImageToPdfTool: React.FC = () => {
 
       {/* Upload Area */}
       <Card sx={{ mb: 3 }}>
-        
+        <CardContent>
           <Box
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -239,13 +241,13 @@ const ImageToPdfTool: React.FC = () => {
                 Choose Files
               </Button>
             </label>
-          </ProfessionalButtonGroup>
-        
-      </ProfessionalCard>
+          </Box>
+        </CardContent>
+      </Card>
 
       {/* Settings */}
       <Card sx={{ mb: 3 }}>
-        
+        <CardContent>
           <Typography variant="h6" gutterBottom>
             Conversion Settings
           </Typography>
@@ -277,13 +279,13 @@ const ImageToPdfTool: React.FC = () => {
               </FormControl>
             </Grid>
           </Grid>
-        
-      </ProfessionalCard>
+        </CardContent>
+      </Card>
 
       {/* Images List */}
       {images.length > 0 && (
         <Card sx={{ mb: 3 }}>
-          
+          <CardContent>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Typography variant="h6">
                 Images ({images.length})
@@ -297,8 +299,8 @@ const ImageToPdfTool: React.FC = () => {
                 <Button onClick={clearAll} color="error" size="small">
                   Clear All
                 </Button>
-              </ProfessionalButtonGroup>
-            </ProfessionalButtonGroup>
+              </Box>
+            </Box>
             
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Use the up/down buttons to reorder pages in the final PDF
@@ -340,8 +342,8 @@ const ImageToPdfTool: React.FC = () => {
                 </ListItem>
               ))}
             </List>
-          
-        </ProfessionalCard>
+          </CardContent>
+        </Card>
       )}
 
       {/* Convert Button */}
@@ -357,7 +359,7 @@ const ImageToPdfTool: React.FC = () => {
         >
           {isConverting ? 'Converting...' : `Convert to PDF (${images.length} images)`}
         </LoadingButton>
-      </ProfessionalButtonGroup>
+      </Box>
 
       {/* Success/Error Snackbar */}
       <Snackbar
@@ -400,7 +402,7 @@ const ImageToPdfTool: React.FC = () => {
           </ol>
         </Typography>
       </Paper>
-    </ProfessionalButtonGroup>
+    </Box>
   );
 };
 

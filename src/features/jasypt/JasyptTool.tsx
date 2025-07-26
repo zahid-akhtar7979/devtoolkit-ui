@@ -47,14 +47,11 @@ const JasyptTool: React.FC = () => {
 
   return (
     <ProfessionalToolLayout 
-      title="
-      Jasypt Encryption/Decryption
-      "
-      "
+      title="Jasypt Encryption/Decryption"
+      description="Encrypt and decrypt text using Jasypt with various algorithms"
     >
       <ProfessionalCard title="Input">
-        
-          <ProfessionalButtonGroup>
+        <ProfessionalButtonGroup sx={{ mb: 2 }}>
             <FormControl sx={{ minWidth: 200 }}>
               <InputLabel>Operation</InputLabel>
               <Select
@@ -125,9 +122,8 @@ const JasyptTool: React.FC = () => {
             <Alert severity="error" sx={{ mt: 2 }}>
               {currentApi.error}
             </Alert>
-          )}
-        
-            </ProfessionalCard>
+        )}
+      </ProfessionalCard>
 
       {result && (
         <ResultCard
@@ -135,7 +131,7 @@ const JasyptTool: React.FC = () => {
           content={operation === 'encrypt' ? result.encrypted || '' : result.decrypted || ''}
         />
       )}
-    </ProfessionalButtonGroup>
+    </ProfessionalToolLayout>
   );
 };
 

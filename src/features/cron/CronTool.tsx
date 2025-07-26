@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
   TextField,
   Alert,
   List,
@@ -12,7 +16,6 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
-import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 
 const CronTool: React.FC = () => {
   const [cronExpression, setCronExpression] = useState('');
@@ -45,14 +48,13 @@ const CronTool: React.FC = () => {
   ];
 
   return (
-    <ProfessionalToolLayout 
-      title="
-      CRON Expression Evaluator
-      "
-      "
-    >
-      <ProfessionalCard title="Input">
-        
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        CRON Expression Evaluator
+      </Typography>
+      
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
           <TextField
             fullWidth
             label="CRON Expression"
@@ -75,9 +77,9 @@ const CronTool: React.FC = () => {
                 sx={{ cursor: 'pointer' }}
               />
             ))}
-          </ProfessionalButtonGroup>
+          </Box>
 
-          <ProfessionalButtonGroup>
+          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
             <LoadingButton
               variant="contained"
               loading={cronApi.loading}
@@ -93,19 +95,19 @@ const CronTool: React.FC = () => {
             >
               Clear
             </LoadingButton>
-          </ProfessionalButtonGroup>
+          </Box>
 
           {cronApi.error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
+            <Alert severity="error" sx={{ mb: 2 }}>
               {cronApi.error}
             </Alert>
           )}
-        
-      </ProfessionalCard>
+        </CardContent>
+      </Card>
 
       {cronApi.data && (
         <Card>
-          
+          <CardContent>
             <Typography variant="h6" gutterBottom>Evaluation Result</Typography>
             
             <ResultCard
@@ -140,10 +142,10 @@ const CronTool: React.FC = () => {
                 </ListItem>
               ))}
             </List>
-          
-        </ProfessionalCard>
+          </CardContent>
+        </Card>
       )}
-    </ProfessionalButtonGroup>
+    </Box>
   );
 };
 
