@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
   TextField,
   Alert,
   Tabs,
@@ -13,7 +17,6 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
-import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 
 const DiffTool: React.FC = () => {
   const [text1, setText1] = useState('');
@@ -80,8 +83,8 @@ That we want to compare`);
           <Chip label={`Added chars: ${stats.addedCharacters}`} color="info" />
           <Chip label={`Deleted chars: ${stats.deletedCharacters}`} color="error" />
           <Chip label={`Change: ${stats.changePercentage?.toFixed(1)}%`} color="secondary" />
-        </ProfessionalButtonGroup>
-      </ProfessionalButtonGroup>
+        </Box>
+      </Box>
     );
   };
 
@@ -96,7 +99,7 @@ That we want to compare`);
             {unifiedDiff}
           </pre>
         </Paper>
-      </ProfessionalButtonGroup>
+      </Box>
     );
   };
 
@@ -126,7 +129,7 @@ That we want to compare`);
                 <Typography sx={{ fontFamily: 'monospace' }}>
                   {line.left}
                 </Typography>
-              </ProfessionalButtonGroup>
+              </Box>
               <Box sx={{ 
                 flex: 1, 
                 p: 1,
@@ -139,23 +142,22 @@ That we want to compare`);
                 <Typography sx={{ fontFamily: 'monospace' }}>
                   {line.right}
                 </Typography>
-              </ProfessionalButtonGroup>
-            </ProfessionalButtonGroup>
+              </Box>
+            </Box>
           ))}
         </Paper>
-      </ProfessionalButtonGroup>
+      </Box>
     );
   };
 
   return (
-    <ProfessionalToolLayout 
-      title="
-      Text Comparison (Diff Tool)
-      "
-      "
-    >
-      <ProfessionalCard title="Input">
-        
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Text Comparison (Diff Tool)
+      </Typography>
+      
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, mb: 2 }}>
             <TextField
               fullWidth
@@ -175,9 +177,9 @@ That we want to compare`);
               onChange={(e) => setText2(e.target.value)}
               placeholder="Enter second text here..."
             />
-          </ProfessionalButtonGroup>
+          </Box>
 
-          <ProfessionalButtonGroup>
+          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
             <LoadingButton
               variant="contained"
               loading={diffApi.loading}
@@ -200,19 +202,19 @@ That we want to compare`);
             >
               Clear
             </LoadingButton>
-          </ProfessionalButtonGroup>
+          </Box>
 
           {diffApi.error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
+            <Alert severity="error" sx={{ mb: 2 }}>
               {diffApi.error}
             </Alert>
           )}
-        
-      </ProfessionalCard>
+        </CardContent>
+      </Card>
 
       {diffApi.data && (
         <Card sx={{ mb: 3 }}>
-          
+          <CardContent>
             <Typography variant="h5" gutterBottom>
               Comparison Result
             </Typography>
@@ -236,7 +238,7 @@ That we want to compare`);
                       {formatDiffResult(diffApi.data)}
                     </Typography>
                     {renderStatistics(diffApi.data.statistics)}
-                  </ProfessionalButtonGroup>
+                  </Box>
                 )}
                 
                 {activeTab === 1 && renderUnifiedDiff(diffApi.data.unifiedDiff)}
@@ -244,10 +246,10 @@ That we want to compare`);
                 {activeTab === 3 && renderStatistics(diffApi.data.statistics)}
               </>
             )}
-          
-        </ProfessionalCard>
+          </CardContent>
+        </Card>
       )}
-    </ProfessionalButtonGroup>
+    </Box>
   );
 };
 
