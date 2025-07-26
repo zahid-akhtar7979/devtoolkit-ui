@@ -147,6 +147,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
         border: 1,
         borderColor: 'transparent',
         backgroundColor: 'background.paper', // Uniform whitish background
+        cursor: 'pointer',
         '&:hover': {
           transform: 'translateY(-2px)',
           boxShadow: theme.shadows[8],
@@ -161,89 +162,79 @@ export const ToolCard: React.FC<ToolCardProps> = ({
         }
         // Removed the featured and highlighted background styling
       }}
+      onClick={handleClick}
     >
-      <CardActionArea
-        onClick={handleClick}
+      <CardContent
         sx={{
-          height: '100%',
+          flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'stretch',
-          justifyContent: 'flex-start',
-          p: 0
+          p: variant === 'compact' ? 1.5 : 2,
+          pb: `${variant === 'compact' ? 1.5 : 2}px !important`,
+          position: 'relative'
         }}
       >
-        <CardContent
+        {/* Header with icon and favorite */}
+        <Box
           sx={{
-            flex: 1,
             display: 'flex',
-            flexDirection: 'column',
-            p: variant === 'compact' ? 1.5 : 2,
-            pb: `${variant === 'compact' ? 1.5 : 2}px !important`,
-            position: 'relative'
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            mb: variant === 'compact' ? 0.5 : 1
           }}
         >
-          {/* Header with icon and favorite */}
-          <Box
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {IconComponent && (
+              <IconComponent
+                className="tool-icon"
+                sx={{
+                  fontSize: variant === 'compact' ? 20 : variant === 'featured' ? 28 : 24,
+                  color: alpha(categoryColor, 0.8),
+                  transition: 'all 0.2s ease-in-out'
+                }}
+              />
+            )}
+            {variant === 'featured' && frequencyBadge && (
+              <Chip
+                label={frequencyBadge.label}
+                size="small"
+                color={frequencyBadge.color}
+                sx={{ fontSize: '0.65rem', height: 18 }}
+              />
+            )}
+            {featuredBadge && (
+              <Chip
+                label={featuredBadge.label}
+                size="small"
+                color={featuredBadge.color}
+                sx={{ 
+                  fontSize: '0.65rem', 
+                  height: 18,
+                  fontWeight: 600,
+                  background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+                  color: 'white'
+                }}
+              />
+            )}
+          </Box>
+
+          <IconButton
+            className="favorite-btn"
+            size="small"
+            onClick={handleFavoriteClick}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              mb: variant === 'compact' ? 0.5 : 1
+              opacity: { xs: 1, sm: isFavorite ? 1 : 0 },
+              transition: 'opacity 0.2s ease-in-out',
+              color: isFavorite ? theme.palette.error.main : theme.palette.text.secondary,
+              '&:hover': {
+                color: theme.palette.error.main,
+                backgroundColor: alpha(theme.palette.error.main, 0.1)
+              }
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {IconComponent && (
-                <IconComponent
-                  className="tool-icon"
-                  sx={{
-                    fontSize: variant === 'compact' ? 20 : variant === 'featured' ? 28 : 24,
-                    color: alpha(categoryColor, 0.8),
-                    transition: 'all 0.2s ease-in-out'
-                  }}
-                />
-              )}
-              {variant === 'featured' && frequencyBadge && (
-                <Chip
-                  label={frequencyBadge.label}
-                  size="small"
-                  color={frequencyBadge.color}
-                  sx={{ fontSize: '0.65rem', height: 18 }}
-                />
-              )}
-              {featuredBadge && (
-                <Chip
-                  label={featuredBadge.label}
-                  size="small"
-                  color={featuredBadge.color}
-                  sx={{ 
-                    fontSize: '0.65rem', 
-                    height: 18,
-                    fontWeight: 600,
-                    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                    color: 'white'
-                  }}
-                />
-              )}
-            </Box>
-
-            <IconButton
-              className="favorite-btn"
-              size="small"
-              onClick={handleFavoriteClick}
-              sx={{
-                opacity: { xs: 1, sm: isFavorite ? 1 : 0 },
-                transition: 'opacity 0.2s ease-in-out',
-                color: isFavorite ? theme.palette.error.main : theme.palette.text.secondary,
-                '&:hover': {
-                  color: theme.palette.error.main,
-                  backgroundColor: alpha(theme.palette.error.main, 0.1)
-                }
-              }}
-            >
-              {isFavorite ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
-            </IconButton>
-          </Box>
+            {isFavorite ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
+          </IconButton>
+        </Box>
 
           {/* Tool name */}
           <Typography
@@ -303,7 +294,6 @@ export const ToolCard: React.FC<ToolCardProps> = ({
             </Box>
           )}
         </CardContent>
-      </CardActionArea>
     </Card>
   );
 }; 

@@ -89,6 +89,8 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(({
         onOpen={() => setIsOpen(true)}
         onClose={() => setIsOpen(false)}
         options={options}
+        autoHighlight={false}
+        selectOnFocus={false}
         getOptionLabel={(option) => 
           typeof option === 'string' ? option : option.value
         }
@@ -131,7 +133,6 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(({
             }}
             fullWidth
             value={value}
-            onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             InputProps={{
@@ -206,13 +207,21 @@ export const SearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(({
             }}
           />
         )}
-        onChange={(_, newValue) => {
-          if (typeof newValue === 'string') {
-            onChange(newValue);
-          } else if (newValue && typeof newValue === 'object') {
-            onChange(newValue.value);
-            if (onSubmit) {
-              onSubmit(newValue.value);
+        onInputChange={(_, newInputValue) => {
+          onChange(newInputValue);
+        }}
+        onChange={(_, newValue, reason) => {
+          if (reason === 'selectOption') {
+            if (typeof newValue === 'string') {
+              onChange(newValue);
+              if (onSubmit) {
+                onSubmit(newValue);
+              }
+            } else if (newValue && typeof newValue === 'object') {
+              onChange(newValue.value);
+              if (onSubmit) {
+                onSubmit(newValue.value);
+              }
             }
           }
         }}

@@ -91,8 +91,12 @@ const ToolSection: React.FC<SectionProps & {
         border: 1,
         borderColor: theme.palette.divider,
         borderRadius: 2,
-        background: alpha(theme.palette.background.paper, 0.6),
-        backdropFilter: 'blur(10px)'
+        background: theme.palette.background.paper,
+        boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06)',
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.07), 0px 2px 4px rgba(0, 0, 0, 0.06)',
+        }
       }}
     >
       <Box
@@ -194,6 +198,9 @@ export const EnhancedLayout: React.FC = () => {
 
   // Show homepage when not searching
   const showHomepage = !hasQuery && location.pathname === '/';
+  
+  // Show search results when there's a query
+  const showSearchResults = hasQuery;
 
   const handleToolClick = (tool: any) => {
     addToRecentlyUsed(tool.id);
@@ -246,9 +253,13 @@ export const EnhancedLayout: React.FC = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box sx={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
+      backgroundAttachment: 'fixed'
+    }}>
       {/* Conditional Header */}
-      {showHomepage ? (
+      {showHomepage || showSearchResults ? (
         // Homepage Header
         <Box
           sx={{
@@ -280,7 +291,7 @@ export const EnhancedLayout: React.FC = () => {
                   Dev Toolkit
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {TOOLS_METADATA.length} essential developer tools
+                  essential developer tools
                 </Typography>
               </Box>
             </Box>
@@ -309,7 +320,7 @@ export const EnhancedLayout: React.FC = () => {
 
       {/* Main Content */}
       <Container maxWidth="xl" sx={{ py: 3 }}>
-        {hasQuery ? (
+        {showSearchResults ? (
           // Search Results
           <Box>
             <Typography variant="h6" sx={{ mb: 3 }}>
