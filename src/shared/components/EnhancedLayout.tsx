@@ -27,6 +27,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 import { SearchBar } from './SearchBar';
 import { ToolCard } from './ToolCard';
+import { ToolHeader } from './ToolHeader';
 import { TOOLS_METADATA, getTopTools, getToolsByCategory, TOOL_CATEGORIES, getHighlightedTools } from '../../constants/tools';
 import { useSearch } from '../../hooks/useSearch';
 import { useUserPreferences } from '../../hooks/useUserPreferences';
@@ -234,42 +235,48 @@ export const EnhancedLayout: React.FC = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      {/* Header */}
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1000,
-          bgcolor: alpha(theme.palette.background.default, 0.8),
-          backdropFilter: 'blur(20px)',
-          borderBottom: 1,
-          borderColor: 'divider',
-          py: 2
-        }}
-      >
-        <Container maxWidth="xl">
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-            <AppsIcon sx={{ fontSize: 32, color: 'primary.main' }} />
-            <Box sx={{ flex: 1 }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '2rem' } }}>
-                Dev Toolkit
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {TOOLS_METADATA.length} essential developer tools
-              </Typography>
+      {/* Conditional Header */}
+      {showHomepage ? (
+        // Homepage Header
+        <Box
+          sx={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 1000,
+            bgcolor: alpha(theme.palette.background.default, 0.8),
+            backdropFilter: 'blur(20px)',
+            borderBottom: 1,
+            borderColor: 'divider',
+            py: 2
+          }}
+        >
+          <Container maxWidth="xl">
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+              <AppsIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '2rem' } }}>
+                  Dev Toolkit
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {TOOLS_METADATA.length} essential developer tools
+                </Typography>
+              </Box>
             </Box>
-          </Box>
 
-          <SearchBar
-            ref={searchRef}
-            value={searchQuery}
-            onChange={setSearchQuery}
-            onSubmit={handleSearchSubmit}
-            searchHistory={searchHistory}
-            placeholder="Search tools... (Ctrl+K)"
-          />
-        </Container>
-      </Box>
+            <SearchBar
+              ref={searchRef}
+              value={searchQuery}
+              onChange={setSearchQuery}
+              onSubmit={handleSearchSubmit}
+              searchHistory={searchHistory}
+              placeholder="Search tools... (Ctrl+K)"
+            />
+          </Container>
+        </Box>
+      ) : (
+        // Tool Header
+        <ToolHeader />
+      )}
 
       {/* Main Content */}
       <Container maxWidth="xl" sx={{ py: 3 }}>
