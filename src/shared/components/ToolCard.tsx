@@ -146,6 +146,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
         transition: 'all 0.2s ease-in-out',
         border: 1,
         borderColor: 'transparent',
+        backgroundColor: 'background.paper', // Uniform whitish background
         '&:hover': {
           transform: 'translateY(-2px)',
           boxShadow: theme.shadows[8],
@@ -157,20 +158,8 @@ export const ToolCard: React.FC<ToolCardProps> = ({
           '& .favorite-btn': {
             opacity: 1,
           }
-        },
-        ...(variant === 'featured' && {
-          background: `linear-gradient(135deg, ${alpha(categoryColor, 0.1)} 0%, ${alpha(categoryColor, 0.05)} 100%)`,
-          borderColor: alpha(categoryColor, 0.3),
-        }),
-        ...(tool.isHighlighted && {
-          background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.08)} 0%, ${alpha(theme.palette.primary.main, 0.03)} 100%)`,
-          borderColor: alpha(theme.palette.primary.main, 0.25),
-          borderWidth: 2,
-          '&:hover': {
-            borderColor: theme.palette.primary.main,
-            boxShadow: `0 8px 32px ${alpha(theme.palette.primary.main, 0.15)}`,
-          }
-        })
+        }
+        // Removed the featured and highlighted background styling
       }}
     >
       <CardActionArea
