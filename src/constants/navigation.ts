@@ -78,13 +78,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     icon: 'Compare',
     description: 'Advanced text comparison with multiple algorithms'
   },
-  {
-    id: 'pdf-merger',
-    label: 'PDF Merger',
-    path: '/pdf-merger',
-    icon: 'PictureAsPdf',
-    description: 'Merge multiple PDFs into a single document'
-  },
+
   {
     id: 'cron',
     label: 'CRON',
@@ -105,6 +99,20 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     path: '/sql',
     icon: 'Storage',
     description: 'Format and beautify SQL queries'
+  },
+  {
+    id: 'image-to-pdf',
+    label: 'Image to PDF',
+    path: '/image-to-pdf',
+    icon: 'PictureAsPdf',
+    description: 'Convert multiple images to a single PDF document with drag & drop reordering'
+  },
+  {
+    id: 'pdf-merger',
+    label: 'PDF Merger',
+    path: '/pdf-merger',
+    icon: 'Merge',
+    description: 'Merge multiple PDF documents into a single file'
   }
 ];
 

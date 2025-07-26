@@ -9,10 +9,10 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
-      },
+            },
     },
   },
   optimizeDeps: {
-    include: ['pdfjs-dist'],
+    include: ['pdf-lib'],
   },
 }); 

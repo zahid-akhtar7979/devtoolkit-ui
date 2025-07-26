@@ -33,6 +33,8 @@ import {
   Storage,
   PictureAsPdf,
   Compress,
+  Edit,
+  Merge,
 } from '@mui/icons-material';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { NAVIGATION_ITEMS } from '../../constants/navigation';
@@ -50,10 +52,12 @@ import RegexTool from '../../features/utility/RegexTool';
 import ConverterTool from '../../features/utility/ConverterTool';
 import DiffTool from '../../features/utility/DiffTool';
 import AdvancedDiffTool from '../../features/diff/DiffTool';
-import PdfMergerTool from '../../features/utility/PdfMergerTool';
+
 import CronTool from '../../features/cron/CronTool';
 import ImageCompressorTool from '../../features/compressor/ImageCompressorTool';
 import SqlTool from '../../features/utility/SqlTool';
+import ImageToPdfTool from '../../features/imagetopdf/ImageToPdfTool';
+import PdfMergerTool from '../../features/utility/PdfMergerTool';
 
 const drawerWidth = 280;
 
@@ -76,6 +80,8 @@ const iconMap: { [key: string]: React.ComponentType } = {
   Storage,
   PictureAsPdf,
   Compress,
+  Edit,
+  Merge,
 };
 
 const Layout: React.FC = () => {
@@ -216,10 +222,12 @@ const Layout: React.FC = () => {
           <Route path="/regex" element={<RegexTool />} />
           <Route path="/converter" element={<ConverterTool />} />
           <Route path="/diff" element={<AdvancedDiffTool />} />
-          <Route path="/pdf-merger" element={<PdfMergerTool />} />
+
           <Route path="/cron" element={<CronTool />} />
           <Route path="/compressor" element={<ImageCompressorTool />} />
           <Route path="/sql" element={<SqlTool />} />
+          <Route path="/image-to-pdf" element={<ImageToPdfTool />} />
+          <Route path="/pdf-merger" element={<PdfMergerTool />} />
         </Routes>
       </Box>
     </Box>
