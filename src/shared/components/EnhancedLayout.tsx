@@ -20,13 +20,14 @@ import {
   History as HistoryIcon,
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
-  Apps as AppsIcon
+  Apps as AppsIcon,
+  Diamond as DiamondIcon
 } from '@mui/icons-material';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 import { SearchBar } from './SearchBar';
 import { ToolCard } from './ToolCard';
-import { TOOLS_METADATA, getTopTools, getToolsByCategory, TOOL_CATEGORIES } from '../../constants/tools';
+import { TOOLS_METADATA, getTopTools, getToolsByCategory, TOOL_CATEGORIES, getHighlightedTools } from '../../constants/tools';
 import { useSearch } from '../../hooks/useSearch';
 import { useUserPreferences } from '../../hooks/useUserPreferences';
 import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
@@ -171,6 +172,7 @@ export const EnhancedLayout: React.FC = () => {
   const [expandedSections, setExpandedSections] = useState({
     recent: true,
     favorites: true,
+    premium: true,
     topTools: true,
     encoding: false,
     security: false,
@@ -213,6 +215,7 @@ export const EnhancedLayout: React.FC = () => {
   // Get organized tools
   const topTools = getTopTools(6);
   const toolsByCategory = getToolsByCategory();
+  const highlightedTools = getHighlightedTools();
 
   // Scroll to top FAB
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -317,6 +320,22 @@ export const EnhancedLayout: React.FC = () => {
                 onToggle={() => toggleSection('favorites')}
                 icon={<StarIcon sx={{ color: 'warning.main' }} />}
                 description="Your bookmarked tools"
+                onToolClick={handleToolClick}
+                onToggleFavorite={toggleFavorite}
+                isFavorite={isFavorite}
+                variant="featured"
+              />
+            )}
+
+            {/* Premium Tools Section */}
+            {highlightedTools.length > 0 && (
+              <ToolSection
+                title="Premium Tools"
+                tools={highlightedTools}
+                expanded={expandedSections.premium}
+                onToggle={() => toggleSection('premium')}
+                icon={<DiamondIcon sx={{ color: 'warning.main' }} />}
+                description="Advanced photo and document tools"
                 onToolClick={handleToolClick}
                 onToggleFavorite={toggleFavorite}
                 isFavorite={isFavorite}

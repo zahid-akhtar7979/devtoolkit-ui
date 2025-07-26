@@ -96,6 +96,13 @@ const getFrequencyBadge = (frequency: ToolMetadata['usageFrequency']) => {
   }
 };
 
+const getPremiumBadge = (tool: ToolMetadata) => {
+  if (tool.isPremium) {
+    return { label: 'Premium', color: 'warning' as const };
+  }
+  return null;
+};
+
 export const ToolCard: React.FC<ToolCardProps> = ({
   tool,
   onClick,
@@ -108,6 +115,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
   const IconComponent = iconMap[tool.icon];
   const categoryColor = getCategoryColor(tool.category, theme);
   const frequencyBadge = getFrequencyBadge(tool.usageFrequency);
+  const premiumBadge = getPremiumBadge(tool);
 
   const handleClick = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -153,6 +161,15 @@ export const ToolCard: React.FC<ToolCardProps> = ({
         ...(variant === 'featured' && {
           background: `linear-gradient(135deg, ${alpha(categoryColor, 0.1)} 0%, ${alpha(categoryColor, 0.05)} 100%)`,
           borderColor: alpha(categoryColor, 0.3),
+        }),
+        ...(tool.isHighlighted && {
+          background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.15)} 0%, ${alpha(theme.palette.warning.main, 0.05)} 100%)`,
+          borderColor: alpha(theme.palette.warning.main, 0.4),
+          borderWidth: 2,
+          '&:hover': {
+            borderColor: theme.palette.warning.main,
+            boxShadow: `0 8px 32px ${alpha(theme.palette.warning.main, 0.3)}`,
+          }
         })
       }}
     >
@@ -203,6 +220,20 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                   size="small"
                   color={frequencyBadge.color}
                   sx={{ fontSize: '0.65rem', height: 18 }}
+                />
+              )}
+              {premiumBadge && (
+                <Chip
+                  label={premiumBadge.label}
+                  size="small"
+                  color={premiumBadge.color}
+                  sx={{ 
+                    fontSize: '0.65rem', 
+                    height: 18,
+                    fontWeight: 600,
+                    background: `linear-gradient(45deg, ${theme.palette.warning.main}, ${theme.palette.warning.dark})`,
+                    color: 'white'
+                  }}
                 />
               )}
             </Box>

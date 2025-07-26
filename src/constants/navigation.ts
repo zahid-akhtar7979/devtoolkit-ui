@@ -52,10 +52,10 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   },
   {
     id: 'image',
-    label: 'Image',
+    label: 'Photo Editor',
     path: '/image',
     icon: 'Image',
-    description: 'Upload, preview, and convert images'
+    description: 'Upload, preview, and convert photos'
   },
   {
     id: 'regex',
@@ -88,10 +88,10 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   },
   {
     id: 'compressor',
-    label: 'Image Compressor',
+    label: 'Image Optimizer',
     path: '/compressor',
     icon: 'Compress',
-    description: 'Reduce image size without losing much quality'
+    description: 'Reduce photo file size without losing quality'
   },
   {
     id: 'sql',
@@ -102,17 +102,17 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   },
   {
     id: 'image-to-pdf',
-    label: 'Image to PDF',
+    label: 'Photos to PDF',
     path: '/image-to-pdf',
     icon: 'PictureAsPdf',
-    description: 'Convert multiple images to a single PDF document with drag & drop reordering'
+    description: 'Convert photos to PDF documents with drag & drop reordering'
   },
   {
     id: 'pdf-merger',
-    label: 'PDF Merger',
+    label: 'PDF Combiner',
     path: '/pdf-merger',
     icon: 'Merge',
-    description: 'Merge multiple PDF documents into a single file'
+    description: 'Combine multiple PDF files into one document'
   }
 ];
 

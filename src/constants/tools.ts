@@ -5,6 +5,8 @@ export interface ToolMetadata extends NavigationItem {
   usageFrequency: 'high' | 'medium' | 'low';
   keywords: string[];
   shortcut?: string;
+  isPremium?: boolean;
+  isHighlighted?: boolean;
 }
 
 export const TOOLS_METADATA: ToolMetadata[] = [
@@ -110,17 +112,7 @@ export const TOOLS_METADATA: ToolMetadata[] = [
     keywords: ['diff', 'compare', 'text', 'difference', 'merge', 'patch']
   },
 
-  // Medium frequency tools
-  {
-    id: 'compressor',
-    label: 'Image Compressor',
-    path: '/compressor',
-    icon: 'Compress',
-    description: 'Reduce image size without losing much quality',
-    category: 'image',
-    usageFrequency: 'medium',
-    keywords: ['image', 'compress', 'optimize', 'reduce', 'size', 'quality']
-  },
+
   {
     id: 'sql',
     label: 'SQL Formatter',
@@ -152,36 +144,54 @@ export const TOOLS_METADATA: ToolMetadata[] = [
     keywords: ['jasypt', 'encrypt', 'decrypt', 'password', 'encryption']
   },
 
-  // Lower frequency tools
+  // Premium Image & File Tools (Highlighted)
   {
     id: 'image-to-pdf',
-    label: 'Image to PDF',
+    label: 'Photos to PDF',
     path: '/image-to-pdf',
     icon: 'PictureAsPdf',
-    description: 'Convert multiple images to a single PDF document with drag & drop reordering',
+    description: 'Convert photos to PDF documents with drag & drop reordering',
     category: 'file',
-    usageFrequency: 'low',
-    keywords: ['image', 'pdf', 'convert', 'document', 'drag', 'drop']
+    usageFrequency: 'high',
+    keywords: ['image', 'pdf', 'convert', 'document', 'drag', 'drop', 'photo', 'picture'],
+    isPremium: true,
+    isHighlighted: true
   },
   {
     id: 'pdf-merger',
-    label: 'PDF Merger',
+    label: 'PDF Combiner',
     path: '/pdf-merger',
     icon: 'Merge',
-    description: 'Merge multiple PDF documents into a single file',
+    description: 'Combine multiple PDF files into one document',
     category: 'file',
-    usageFrequency: 'low',
-    keywords: ['pdf', 'merge', 'combine', 'join', 'document']
+    usageFrequency: 'high',
+    keywords: ['pdf', 'merge', 'combine', 'join', 'document', 'file'],
+    isPremium: true,
+    isHighlighted: true
+  },
+  {
+    id: 'compressor',
+    label: 'Image Optimizer',
+    path: '/compressor',
+    icon: 'Compress',
+    description: 'Reduce photo file size without losing quality',
+    category: 'image',
+    usageFrequency: 'high',
+    keywords: ['image', 'compress', 'optimize', 'reduce', 'size', 'quality', 'photo'],
+    isPremium: true,
+    isHighlighted: true
   },
   {
     id: 'image',
-    label: 'Image Tools',
+    label: 'Photo Editor',
     path: '/image',
     icon: 'Image',
-    description: 'Upload, preview, and convert images',
+    description: 'Upload, preview, and convert photos',
     category: 'image',
-    usageFrequency: 'low',
-    keywords: ['image', 'upload', 'preview', 'convert', 'photo']
+    usageFrequency: 'medium',
+    keywords: ['image', 'upload', 'preview', 'convert', 'photo', 'edit'],
+    isPremium: true,
+    isHighlighted: true
   }
 ];
 
@@ -190,9 +200,9 @@ export const TOOL_CATEGORIES = {
   security: { label: 'Security & Hashing', icon: 'Security' },
   conversion: { label: 'Data Conversion', icon: 'Transform' },
   text: { label: 'Text Processing', icon: 'TextFields' },
-  image: { label: 'Image Processing', icon: 'Image' },
+  image: { label: 'Photo & Image Tools', icon: 'Image' },
   development: { label: 'Development Tools', icon: 'Terminal' },
-  file: { label: 'File Operations', icon: 'Folder' }
+  file: { label: 'Document & File Tools', icon: 'Folder' }
 };
 
 // Get tools sorted by usage frequency
@@ -217,4 +227,14 @@ export const getTopTools = (count: number = 6) => {
   return TOOLS_METADATA
     .filter(tool => tool.usageFrequency === 'high')
     .slice(0, count);
+};
+
+// Get highlighted premium tools
+export const getHighlightedTools = () => {
+  return TOOLS_METADATA.filter(tool => tool.isHighlighted);
+};
+
+// Get premium tools
+export const getPremiumTools = () => {
+  return TOOLS_METADATA.filter(tool => tool.isPremium);
 }; 
