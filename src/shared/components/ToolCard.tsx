@@ -98,7 +98,7 @@ const getFrequencyBadge = (frequency: ToolMetadata['usageFrequency']) => {
 
 const getFeaturedBadge = (tool: ToolMetadata) => {
   if (tool.isHighlighted) {
-    return { label: 'Featured', color: 'success' as const };
+    return { label: 'Featured', color: 'primary' as const };
   }
   return null;
 };
@@ -163,12 +163,12 @@ export const ToolCard: React.FC<ToolCardProps> = ({
           borderColor: alpha(categoryColor, 0.3),
         }),
         ...(tool.isHighlighted && {
-          background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.12)} 0%, ${alpha(theme.palette.success.main, 0.04)} 100%)`,
-          borderColor: alpha(theme.palette.success.main, 0.3),
+          background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.08)} 0%, ${alpha(theme.palette.primary.main, 0.03)} 100%)`,
+          borderColor: alpha(theme.palette.primary.main, 0.25),
           borderWidth: 2,
           '&:hover': {
-            borderColor: theme.palette.success.main,
-            boxShadow: `0 8px 32px ${alpha(theme.palette.success.main, 0.2)}`,
+            borderColor: theme.palette.primary.main,
+            boxShadow: `0 8px 32px ${alpha(theme.palette.primary.main, 0.15)}`,
           }
         })
       }}
@@ -231,7 +231,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                     fontSize: '0.65rem', 
                     height: 18,
                     fontWeight: 600,
-                    background: `linear-gradient(45deg, ${theme.palette.success.main}, ${theme.palette.success.dark})`,
+                    background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
                     color: 'white'
                   }}
                 />

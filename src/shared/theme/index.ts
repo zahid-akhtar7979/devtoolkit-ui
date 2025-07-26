@@ -4,10 +4,29 @@ export const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#1976d2',
+      main: '#2E5BBA',
+      light: '#5B7BC0',
+      dark: '#1E3A8A',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#6B7280',
+      light: '#9CA3AF',
+      dark: '#374151',
+    },
+    success: {
+      main: '#10B981',
+      light: '#34D399',
+      dark: '#059669',
+    },
+    warning: {
+      main: '#F59E0B',
+      light: '#FBBF24',
+      dark: '#D97706',
+    },
+    error: {
+      main: '#EF4444',
+      light: '#F87171',
+      dark: '#DC2626',
     },
   },
   typography: {

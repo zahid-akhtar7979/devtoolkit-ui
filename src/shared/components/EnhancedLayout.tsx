@@ -341,7 +341,7 @@ export const EnhancedLayout: React.FC = () => {
                 tools={highlightedTools}
                 expanded={expandedSections.premium}
                 onToggle={() => toggleSection('premium')}
-                icon={<DiamondIcon sx={{ color: 'success.main' }} />}
+                icon={<DiamondIcon sx={{ color: 'primary.main' }} />}
                 description="Popular photo and document tools"
                 onToolClick={handleToolClick}
                 onToggleFavorite={toggleFavorite}
