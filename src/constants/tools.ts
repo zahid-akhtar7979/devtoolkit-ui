@@ -171,7 +171,7 @@ export const TOOLS_METADATA: ToolMetadata[] = [
   },
   {
     id: 'compressor',
-    label: 'Image Optimizer',
+    label: 'Image Compressor',
     path: '/compressor',
     icon: 'Compress',
     description: 'Reduce photo file size without losing quality',
@@ -183,13 +183,13 @@ export const TOOLS_METADATA: ToolMetadata[] = [
   },
   {
     id: 'image',
-    label: 'Photo Editor',
+    label: 'Image Converter',
     path: '/image',
     icon: 'Image',
-    description: 'Upload, preview, and convert photos',
+    description: 'Convert images to Base64 and vice versa',
     category: 'image',
     usageFrequency: 'medium',
-    keywords: ['image', 'upload', 'preview', 'convert', 'photo', 'edit'],
+    keywords: ['image', 'upload', 'preview', 'convert', 'photo', 'base64', 'encode', 'decode'],
     isPremium: false,
     isHighlighted: true
   }

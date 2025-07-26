@@ -52,10 +52,10 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   },
   {
     id: 'image',
-    label: 'Photo Editor',
+    label: 'Image Converter',
     path: '/image',
     icon: 'Image',
-    description: 'Upload, preview, and convert photos'
+    description: 'Convert images to Base64 and vice versa'
   },
   {
     id: 'regex',
@@ -88,7 +88,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   },
   {
     id: 'compressor',
-    label: 'Image Optimizer',
+    label: 'Image Compressor',
     path: '/compressor',
     icon: 'Compress',
     description: 'Reduce photo file size without losing quality'
