@@ -5,4 +5,5 @@ export { ResultCard } from './ResultCard';
 export { EnhancedLayout } from './EnhancedLayout';
 export { SearchBar } from './SearchBar';
 export { ToolCard } from './ToolCard';
-export { ToolHeader } from './ToolHeader'; 
+export { ToolHeader } from './ToolHeader';
+export { ToolSelector } from './ToolSelector'; 

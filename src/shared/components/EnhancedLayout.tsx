@@ -28,6 +28,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { SearchBar } from './SearchBar';
 import { ToolCard } from './ToolCard';
 import { ToolHeader } from './ToolHeader';
+import { ToolSelector } from './ToolSelector';
 import { TOOLS_METADATA, getTopTools, getToolsByCategory, TOOL_CATEGORIES, getHighlightedTools } from '../../constants/tools';
 import { useSearch } from '../../hooks/useSearch';
 import { useUserPreferences } from '../../hooks/useUserPreferences';
@@ -200,6 +201,14 @@ export const EnhancedLayout: React.FC = () => {
     clearSearch();
   };
 
+  const handleToolSelectorOpen = () => {
+    setToolSelectorOpen(true);
+  };
+
+  const handleToolSelectorClose = () => {
+    setToolSelectorOpen(false);
+  };
+
   const handleSearchSubmit = (query: string) => {
     if (query.trim()) {
       addToSearchHistory(query.trim());
@@ -220,6 +229,9 @@ export const EnhancedLayout: React.FC = () => {
 
   // Scroll to top FAB
   const [showScrollTop, setShowScrollTop] = useState(false);
+  
+  // Tool selector modal
+  const [toolSelectorOpen, setToolSelectorOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -252,7 +264,17 @@ export const EnhancedLayout: React.FC = () => {
         >
           <Container maxWidth="xl">
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-              <AppsIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+              <IconButton
+                onClick={handleToolSelectorOpen}
+                sx={{
+                  p: 1,
+                  '&:hover': {
+                    bgcolor: alpha(theme.palette.primary.main, 0.1),
+                  }
+                }}
+              >
+                <AppsIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+              </IconButton>
               <Box sx={{ flex: 1 }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '2rem' } }}>
                   Dev Toolkit
@@ -271,12 +293,19 @@ export const EnhancedLayout: React.FC = () => {
               searchHistory={searchHistory}
               placeholder="Search tools... (Ctrl+K)"
             />
-          </Container>
-        </Box>
+                  </Container>
+      </Box>
       ) : (
         // Tool Header
         <ToolHeader />
       )}
+
+      {/* Tool Selector Modal */}
+      <ToolSelector
+        open={toolSelectorOpen}
+        onClose={handleToolSelectorClose}
+        onToolSelect={handleToolClick}
+      />
 
       {/* Main Content */}
       <Container maxWidth="xl" sx={{ py: 3 }}>
