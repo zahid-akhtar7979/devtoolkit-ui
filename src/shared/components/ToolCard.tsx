@@ -96,9 +96,9 @@ const getFrequencyBadge = (frequency: ToolMetadata['usageFrequency']) => {
   }
 };
 
-const getPremiumBadge = (tool: ToolMetadata) => {
-  if (tool.isPremium) {
-    return { label: 'Premium', color: 'warning' as const };
+const getFeaturedBadge = (tool: ToolMetadata) => {
+  if (tool.isHighlighted) {
+    return { label: 'Featured', color: 'success' as const };
   }
   return null;
 };
@@ -115,7 +115,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
   const IconComponent = iconMap[tool.icon];
   const categoryColor = getCategoryColor(tool.category, theme);
   const frequencyBadge = getFrequencyBadge(tool.usageFrequency);
-  const premiumBadge = getPremiumBadge(tool);
+  const featuredBadge = getFeaturedBadge(tool);
 
   const handleClick = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -163,12 +163,12 @@ export const ToolCard: React.FC<ToolCardProps> = ({
           borderColor: alpha(categoryColor, 0.3),
         }),
         ...(tool.isHighlighted && {
-          background: `linear-gradient(135deg, ${alpha(theme.palette.warning.main, 0.15)} 0%, ${alpha(theme.palette.warning.main, 0.05)} 100%)`,
-          borderColor: alpha(theme.palette.warning.main, 0.4),
+          background: `linear-gradient(135deg, ${alpha(theme.palette.success.main, 0.12)} 0%, ${alpha(theme.palette.success.main, 0.04)} 100%)`,
+          borderColor: alpha(theme.palette.success.main, 0.3),
           borderWidth: 2,
           '&:hover': {
-            borderColor: theme.palette.warning.main,
-            boxShadow: `0 8px 32px ${alpha(theme.palette.warning.main, 0.3)}`,
+            borderColor: theme.palette.success.main,
+            boxShadow: `0 8px 32px ${alpha(theme.palette.success.main, 0.2)}`,
           }
         })
       }}
@@ -222,16 +222,16 @@ export const ToolCard: React.FC<ToolCardProps> = ({
                   sx={{ fontSize: '0.65rem', height: 18 }}
                 />
               )}
-              {premiumBadge && (
+              {featuredBadge && (
                 <Chip
-                  label={premiumBadge.label}
+                  label={featuredBadge.label}
                   size="small"
-                  color={premiumBadge.color}
+                  color={featuredBadge.color}
                   sx={{ 
                     fontSize: '0.65rem', 
                     height: 18,
                     fontWeight: 600,
-                    background: `linear-gradient(45deg, ${theme.palette.warning.main}, ${theme.palette.warning.dark})`,
+                    background: `linear-gradient(45deg, ${theme.palette.success.main}, ${theme.palette.success.dark})`,
                     color: 'white'
                   }}
                 />

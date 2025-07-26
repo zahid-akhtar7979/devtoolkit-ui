@@ -144,7 +144,7 @@ export const TOOLS_METADATA: ToolMetadata[] = [
     keywords: ['jasypt', 'encrypt', 'decrypt', 'password', 'encryption']
   },
 
-  // Premium Image & File Tools (Highlighted)
+  // Featured Image & File Tools (Highlighted)
   {
     id: 'image-to-pdf',
     label: 'Photos to PDF',
@@ -154,7 +154,7 @@ export const TOOLS_METADATA: ToolMetadata[] = [
     category: 'file',
     usageFrequency: 'high',
     keywords: ['image', 'pdf', 'convert', 'document', 'drag', 'drop', 'photo', 'picture'],
-    isPremium: true,
+    isPremium: false,
     isHighlighted: true
   },
   {
@@ -166,7 +166,7 @@ export const TOOLS_METADATA: ToolMetadata[] = [
     category: 'file',
     usageFrequency: 'high',
     keywords: ['pdf', 'merge', 'combine', 'join', 'document', 'file'],
-    isPremium: true,
+    isPremium: false,
     isHighlighted: true
   },
   {
@@ -178,7 +178,7 @@ export const TOOLS_METADATA: ToolMetadata[] = [
     category: 'image',
     usageFrequency: 'high',
     keywords: ['image', 'compress', 'optimize', 'reduce', 'size', 'quality', 'photo'],
-    isPremium: true,
+    isPremium: false,
     isHighlighted: true
   },
   {
@@ -190,7 +190,7 @@ export const TOOLS_METADATA: ToolMetadata[] = [
     category: 'image',
     usageFrequency: 'medium',
     keywords: ['image', 'upload', 'preview', 'convert', 'photo', 'edit'],
-    isPremium: true,
+    isPremium: false,
     isHighlighted: true
   }
 ];
@@ -234,7 +234,7 @@ export const getHighlightedTools = () => {
   return TOOLS_METADATA.filter(tool => tool.isHighlighted);
 };
 
-// Get premium tools
-export const getPremiumTools = () => {
-  return TOOLS_METADATA.filter(tool => tool.isPremium);
+// Get featured tools
+export const getFeaturedTools = () => {
+  return TOOLS_METADATA.filter(tool => tool.isHighlighted);
 }; 

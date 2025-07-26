@@ -327,15 +327,15 @@ export const EnhancedLayout: React.FC = () => {
               />
             )}
 
-            {/* Premium Tools Section */}
+            {/* Featured Tools Section */}
             {highlightedTools.length > 0 && (
               <ToolSection
-                title="Premium Tools"
+                title="Featured Tools"
                 tools={highlightedTools}
                 expanded={expandedSections.premium}
                 onToggle={() => toggleSection('premium')}
-                icon={<DiamondIcon sx={{ color: 'warning.main' }} />}
-                description="Advanced photo and document tools"
+                icon={<DiamondIcon sx={{ color: 'success.main' }} />}
+                description="Popular photo and document tools"
                 onToolClick={handleToolClick}
                 onToggleFavorite={toggleFavorite}
                 isFavorite={isFavorite}
