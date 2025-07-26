@@ -1,9 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
+  BoxContent,
   Button,
   Alert,
   List,
@@ -282,7 +279,8 @@ const PdfMergerTool: React.FC = () => {
   const totalSelectedPages = pdfFiles.reduce((total, file) => total + file.selectedPages.length, 0);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <ProfessionalToolLayout 
+      title="
       <Typography variant="h4" gutterBottom>
         <PdfIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
         PDF Merger
@@ -294,7 +292,7 @@ const PdfMergerTool: React.FC = () => {
 
       {/* Upload Area */}
       <Card sx={{ mb: 3 }}>
-        <CardContent>
+        
           <Box sx={{ textAlign: 'center', p: 3 }}>
             <input
               type="file"
@@ -316,13 +314,13 @@ const PdfMergerTool: React.FC = () => {
                 Choose PDF Files
               </Button>
             </label>
-          </Box>
-        </CardContent>
-      </Card>
+          </ProfessionalButtonGroup>
+        
+      </ProfessionalCard>
 
       {/* Output Settings */}
       <Card sx={{ mb: 3 }}>
-        <CardContent>
+        
           <Typography variant="h6" gutterBottom>
             Merge Settings
           </Typography>
@@ -334,13 +332,13 @@ const PdfMergerTool: React.FC = () => {
             placeholder="merged-document.pdf"
             helperText="Enter the name for the merged PDF file"
           />
-        </CardContent>
-      </Card>
+        
+      </ProfessionalCard>
 
       {/* PDF Files List */}
       {pdfFiles.length > 0 && (
         <Card sx={{ mb: 3 }}>
-          <CardContent>
+          
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Typography variant="h6">
                 PDF Files ({pdfFiles.length})
@@ -354,8 +352,8 @@ const PdfMergerTool: React.FC = () => {
                 <Button onClick={clearAll} color="error" size="small">
                   Clear All
                 </Button>
-              </Box>
-            </Box>
+              </ProfessionalButtonGroup>
+            </ProfessionalButtonGroup>
             
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Use the up/down arrows to reorder files. Files will be merged in this order.
@@ -410,8 +408,8 @@ const PdfMergerTool: React.FC = () => {
                         size="small" 
                         variant="outlined"
                       />
-                    </Box>
-                  </Box>
+                    </ProfessionalButtonGroup>
+                  </ProfessionalButtonGroup>
 
                   {/* Action buttons with fixed positioning */}
                   <Box sx={{ 
@@ -454,12 +452,12 @@ const PdfMergerTool: React.FC = () => {
                     >
                       <DeleteIcon />
                     </IconButton>
-                  </Box>
+                  </ProfessionalButtonGroup>
                 </ListItem>
               ))}
             </List>
-          </CardContent>
-        </Card>
+          
+        </ProfessionalCard>
       )}
 
       {/* Merge Button */}
@@ -474,7 +472,7 @@ const PdfMergerTool: React.FC = () => {
         >
           {isProcessing ? 'Merging...' : `Merge ${totalSelectedPages} Selected Pages`}
         </Button>
-      </Box>
+      </ProfessionalButtonGroup>
 
       {/* Progress Bar */}
       {isProcessing && (
@@ -483,7 +481,7 @@ const PdfMergerTool: React.FC = () => {
           <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 1 }}>
             Processing PDF files, please wait...
           </Typography>
-        </Box>
+        </ProfessionalButtonGroup>
       )}
 
       {/* Success/Error Snackbar */}
@@ -508,7 +506,7 @@ const PdfMergerTool: React.FC = () => {
 
       {/* Help */}
       <Card sx={{ mt: 3, bgcolor: 'action.hover' }}>
-        <CardContent>
+        
           <Typography variant="h6" gutterBottom>
             How to use:
           </Typography>
@@ -520,8 +518,8 @@ const PdfMergerTool: React.FC = () => {
               <li>Click "Merge PDFs" to combine all files and download the result</li>
             </ol>
           </Typography>
-        </CardContent>
-      </Card>
+        
+      </ProfessionalCard>
 
       {/* Preview Dialog */}
       <Dialog
@@ -548,8 +546,8 @@ const PdfMergerTool: React.FC = () => {
               <IconButton onClick={() => setPreviewScale(prev => Math.min(2.0, prev + 0.2))}>
                 <ZoomInIcon />
               </IconButton>
-            </Box>
-          </Box>
+            </ProfessionalButtonGroup>
+          </ProfessionalButtonGroup>
         </DialogTitle>
         
         <DialogContent>
@@ -560,7 +558,7 @@ const PdfMergerTool: React.FC = () => {
                 <Typography variant="h6" gutterBottom>
                   Page Selection ({currentPreviewFile.selectedPages.length} of {currentPreviewFile.numPages} selected)
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                <ProfessionalButtonGroup>
                   <Button
                     variant="outlined"
                     size="small"
@@ -575,7 +573,7 @@ const PdfMergerTool: React.FC = () => {
                   >
                     Deselect All
                   </Button>
-                </Box>
+                </ProfessionalButtonGroup>
                 
                 {/* Page Checkboxes */}
                 <Grid container spacing={1}>
@@ -595,7 +593,7 @@ const PdfMergerTool: React.FC = () => {
                     </Grid>
                   ))}
                 </Grid>
-              </Box>
+              </ProfessionalButtonGroup>
 
               {/* PDF Preview */}
               <Box sx={{ textAlign: 'center', border: '1px solid', borderColor: 'divider', borderRadius: 1, p: 2 }}>
@@ -623,7 +621,7 @@ const PdfMergerTool: React.FC = () => {
                       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200 }}>
                         <CircularProgress />
                         <Typography sx={{ ml: 2 }}>Loading PDF...</Typography>
-                      </Box>
+                      </ProfessionalButtonGroup>
                     }
                     error={
                       <Box sx={{ textAlign: 'center', p: 3 }}>
@@ -633,7 +631,7 @@ const PdfMergerTool: React.FC = () => {
                         <Typography variant="body2" color="text.secondary">
                           The PDF file might be corrupted, encrypted, or in an unsupported format.
                         </Typography>
-                      </Box>
+                      </ProfessionalButtonGroup>
                     }
                   >
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -654,7 +652,7 @@ const PdfMergerTool: React.FC = () => {
                       >
                         Next
                       </Button>
-                    </Box>
+                    </ProfessionalButtonGroup>
                     
                     <Box sx={{ 
                       maxHeight: 400, 
@@ -671,7 +669,7 @@ const PdfMergerTool: React.FC = () => {
                         renderTextLayer={false}
                         renderAnnotationLayer={false}
                       />
-                    </Box>
+                    </ProfessionalButtonGroup>
                     
                     <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                       {previewDialog.pdfFile.selectedPages.includes(currentPreviewPage) 
@@ -681,8 +679,8 @@ const PdfMergerTool: React.FC = () => {
                     </Typography>
                   </Document>
                 )}
-              </Box>
-            </Box>
+              </ProfessionalButtonGroup>
+            </ProfessionalButtonGroup>
           )}
         </DialogContent>
         
@@ -690,7 +688,7 @@ const PdfMergerTool: React.FC = () => {
           <Button onClick={closePreview}>Close</Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </ProfessionalButtonGroup>
   );
 };
 

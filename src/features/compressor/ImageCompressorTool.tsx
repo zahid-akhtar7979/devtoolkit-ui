@@ -1,9 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
+  BoxContent,
   Button,
   Alert,
   Paper,
@@ -193,7 +190,8 @@ const ImageCompressorTool: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <ProfessionalToolLayout 
+      title="
       {/* Header Section */}
       <Typography variant="h4" gutterBottom>
         <CompressIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
@@ -206,7 +204,7 @@ const ImageCompressorTool: React.FC = () => {
 
       {/* Configuration Panel */}
       <Card sx={{ mb: 3 }}>
-        <CardContent>
+        
           <Typography variant="h6" gutterBottom>
             <CompressIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
             Compression Settings
@@ -227,7 +225,7 @@ const ImageCompressorTool: React.FC = () => {
                   max={100}
                   step={5}
                 />
-              </Box>
+              </ProfessionalButtonGroup>
 
               <FormControl fullWidth sx={{ mb: 2 }}>
                 <InputLabel>Output Format</InputLabel>
@@ -259,7 +257,7 @@ const ImageCompressorTool: React.FC = () => {
                   max={4096}
                   step={32}
                 />
-              </Box>
+              </ProfessionalButtonGroup>
 
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body2" sx={{ mb: 1 }}>
@@ -272,15 +270,15 @@ const ImageCompressorTool: React.FC = () => {
                   max={4096}
                   step={32}
                 />
-              </Box>
+              </ProfessionalButtonGroup>
             </Grid>
           </Grid>
-        </CardContent>
-      </Card>
+        
+      </ProfessionalCard>
 
       {/* Upload Section */}
       <Card sx={{ mb: 3 }}>
-        <CardContent>
+        
           <Typography variant="h6" gutterBottom>
             <ImageIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
             Upload Images
@@ -317,7 +315,7 @@ const ImageCompressorTool: React.FC = () => {
             <Typography variant="body2" color="text.secondary">
               Supports JPEG, PNG, WebP • Max {maxFileSizeMB}MB per file
             </Typography>
-          </Box>
+          </ProfessionalButtonGroup>
 
           {selectedFiles.length > 0 && (
             <Box sx={{ mb: 3 }}>
@@ -333,8 +331,8 @@ const ImageCompressorTool: React.FC = () => {
                     color="primary"
                   />
                 ))}
-              </Box>
-            </Box>
+              </ProfessionalButtonGroup>
+            </ProfessionalButtonGroup>
           )}
 
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
@@ -355,7 +353,7 @@ const ImageCompressorTool: React.FC = () => {
             >
               Clear All
             </Button>
-          </Box>
+          </ProfessionalButtonGroup>
 
           {isCompressing && (
             <Box sx={{ mt: 2 }}>
@@ -363,18 +361,18 @@ const ImageCompressorTool: React.FC = () => {
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 Processing images...
               </Typography>
-            </Box>
+            </ProfessionalButtonGroup>
           )}
 
           {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
           {success && <Alert severity="success" sx={{ mt: 2 }}>{success}</Alert>}
-        </CardContent>
-      </Card>
+        
+      </ProfessionalCard>
 
       {/* Results Section */}
       {compressedImages.length > 0 && (
         <Card sx={{ mb: 3 }}>
-          <CardContent>
+          
             <Typography variant="h6" gutterBottom>
               Compression Results
             </Typography>
@@ -399,7 +397,7 @@ const ImageCompressorTool: React.FC = () => {
               >
                 Download All
               </Button>
-            </Box>
+            </ProfessionalButtonGroup>
 
             <Grid container spacing={3}>
               {compressedImages.map((img, index) => (
@@ -418,7 +416,7 @@ const ImageCompressorTool: React.FC = () => {
                           style={{ width: '100%', maxHeight: '120px', objectFit: 'cover', borderRadius: '4px' }}
                         />
                         <Typography variant="body2">{formatFileSize(img.originalSize)}</Typography>
-                      </Box>
+                      </ProfessionalButtonGroup>
                       <Box sx={{ flex: 1, textAlign: 'center' }}>
                         <Typography variant="caption" color="text.secondary">Compressed</Typography>
                         <img 
@@ -427,8 +425,8 @@ const ImageCompressorTool: React.FC = () => {
                           style={{ width: '100%', maxHeight: '120px', objectFit: 'cover', borderRadius: '4px' }}
                         />
                         <Typography variant="body2">{formatFileSize(img.compressedSize)}</Typography>
-                      </Box>
-                    </Box>
+                      </ProfessionalButtonGroup>
+                    </ProfessionalButtonGroup>
 
                     <Chip
                       label={`${img.compressionRatio.toFixed(1)}% smaller`}
@@ -446,17 +444,17 @@ const ImageCompressorTool: React.FC = () => {
                     >
                       Download
                     </Button>
-                  </Card>
+                  </ProfessionalCard>
                 </Grid>
               ))}
             </Grid>
-          </CardContent>
-        </Card>
+          
+        </ProfessionalCard>
       )}
 
       {/* Help */}
       <Card sx={{ bgcolor: 'action.hover' }}>
-        <CardContent>
+        
           <Typography variant="h6" gutterBottom>
             How to use:
           </Typography>
@@ -468,9 +466,9 @@ const ImageCompressorTool: React.FC = () => {
               <li>Download individual images or use "Download All" for batch download</li>
             </ol>
           </Typography>
-        </CardContent>
-      </Card>
-    </Box>
+        
+      </ProfessionalCard>
+    </ProfessionalButtonGroup>
   );
 };
 

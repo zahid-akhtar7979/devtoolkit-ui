@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,6 +12,7 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 
 const SqlTool: React.FC = () => {
   const [sql, setSql] = useState('');
@@ -42,13 +39,14 @@ const SqlTool: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        SQL Formatter
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
+    <ProfessionalToolLayout 
+      title="
+      SQL Formatter
+      "
+      "
+    >
+      <ProfessionalCard title="Input">
+        
           <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel>SQL Dialect</InputLabel>
             <Select
@@ -75,7 +73,7 @@ const SqlTool: React.FC = () => {
             sx={{ mb: 2 }}
           />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+          <ProfessionalButtonGroup>
             <LoadingButton
               variant="contained"
               loading={sqlApi.loading}
@@ -98,15 +96,15 @@ const SqlTool: React.FC = () => {
             >
               Clear
             </LoadingButton>
-          </Box>
+          </ProfessionalButtonGroup>
 
           {sqlApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" sx={{ mt: 2 }}>
               {sqlApi.error}
             </Alert>
           )}
-        </CardContent>
-      </Card>
+        
+      </ProfessionalCard>
 
       {sqlApi.data && (
         <ResultCard
@@ -114,7 +112,7 @@ const SqlTool: React.FC = () => {
           content={sqlApi.data.formatted || 'No formatted SQL'}
         />
       )}
-    </Box>
+    </ProfessionalButtonGroup>
   );
 };
 

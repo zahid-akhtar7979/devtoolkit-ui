@@ -1,9 +1,6 @@
 import React, { useState, useRef } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
+  BoxContent,
   Button,
   Alert,
   Paper,
@@ -110,19 +107,20 @@ const ImageTool: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Image Utilities
-      </Typography>
+    <ProfessionalToolLayout 
+      title="
+      Image Utilities
+      "
+      description="
       
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
       <Grid container spacing={3}>
         {/* Image to Base64 Section */}
         <Grid item xs={12} md={6}>
           <Card sx={{ height: 'fit-content' }}>
-            <CardContent>
+            
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <ImageIcon />
                 Image to Base64
@@ -151,7 +149,7 @@ const ImageTool: React.FC = () => {
                   <Typography variant="body2" color="text.secondary">
                     Selected: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
                   </Typography>
-                </Box>
+                </ProfessionalButtonGroup>
               )}
 
               <Button
@@ -177,17 +175,17 @@ const ImageTool: React.FC = () => {
                         objectFit: 'contain'
                       }}
                     />
-                  </Box>
-                </Box>
+                  </ProfessionalButtonGroup>
+                </ProfessionalButtonGroup>
               )}
-            </CardContent>
-          </Card>
+            
+          </ProfessionalCard>
         </Grid>
 
         {/* Base64 to Image Section */}
         <Grid item xs={12} md={6}>
           <Card sx={{ height: 'fit-content' }}>
-            <CardContent>
+            
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <CodeIcon />
                 Base64 to Image
@@ -227,11 +225,11 @@ const ImageTool: React.FC = () => {
                         objectFit: 'contain'
                       }}
                     />
-                  </Box>
-                </Box>
+                  </ProfessionalButtonGroup>
+                </ProfessionalButtonGroup>
               )}
-            </CardContent>
-          </Card>
+            
+          </ProfessionalCard>
         </Grid>
       </Grid>
 
@@ -240,7 +238,7 @@ const ImageTool: React.FC = () => {
         <Button variant="outlined" onClick={handleClear}>
           Clear All
         </Button>
-      </Box>
+      </ProfessionalButtonGroup>
 
       {/* Results Section */}
       {base64Result && (
@@ -250,9 +248,9 @@ const ImageTool: React.FC = () => {
             content={base64Result}
             maxHeight={300}
           />
-        </Box>
+        </ProfessionalButtonGroup>
       )}
-    </Box>
+    </ProfessionalButtonGroup>
   );
 };
 
