@@ -5,343 +5,228 @@ import {
   CardContent,
   Typography,
   Button,
+  Alert,
+  Paper,
+  Grid,
+  Divider,
+  CircularProgress,
+  Snackbar,
+  TextField,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  TextField,
-  Grid,
-  Alert,
-  Paper,
-  IconButton,
-  CircularProgress,
-  Chip,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  Snackbar,
 } from '@mui/material';
-import {
-  CloudUpload,
-  Download,
-  Delete,
-  Image as ImageIcon,
-  PictureAsPdf,
-  CheckCircle,
-  Error as ErrorIcon,
-} from '@mui/icons-material';
+import { useDropzone } from 'react-dropzone';
+import { PictureAsPdf, CloudUpload, Delete, CheckCircle, Error } from '@mui/icons-material';
 import { imageToPdfService } from '../../services/imageToPdfService';
 import { useApi } from '../../hooks/useApi';
 import { LoadingButton } from '../../shared/components/LoadingButton';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 interface ImageFile {
   file: File;
-  id: string;
   preview: string;
+  order: number;
+}
+
+interface CompressedImage {
+  originalFile: File;
+  compressedBlob: Blob;
+  originalSize: number;
+  compressedSize: number;
+  compressionRatio: number;
+  preview: string;
+  compressedPreview: string;
 }
 
 const ImageToPdfTool: React.FC = () => {
   const [images, setImages] = useState<ImageFile[]>([]);
-  const [outputFileName, setOutputFileName] = useState('');
-  const [pageSize, setPageSize] = useState('A4');
   const [isConverting, setIsConverting] = useState(false);
-  const [dragActive, setDragActive] = useState(false);
-  const [snackbar, setSnackbar] = useState<{
-    open: boolean;
-    message: string;
-    severity: 'success' | 'error';
-  }>({ open: false, message: '', severity: 'success' });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success' as 'success' | 'error'
+  });
 
   const convertApi = useApi(imageToPdfService.convertToPdf);
 
-  // Handle file selection
-  const handleFileSelect = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    const newImages: ImageFile[] = files
-      .filter(file => file.type.startsWith('image/'))
-      .map((file) => ({
-        file,
-        id: Math.random().toString(36).substr(2, 9),
-        preview: URL.createObjectURL(file)
-      }));
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const newImages = acceptedFiles.map((file, index) => ({
+      file,
+      preview: URL.createObjectURL(file),
+      order: images.length + index
+    }));
     setImages(prev => [...prev, ...newImages]);
-  }, []);
+  }, [images.length]);
 
-  // Handle drag and drop
-  const handleDrag = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.bmp', '.webp']
+    },
+    multiple: true
+  });
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    const files = Array.from(e.dataTransfer.files);
-    const newImages: ImageFile[] = files
-      .filter(file => file.type.startsWith('image/'))
-      .map((file) => ({
-        file,
-        id: Math.random().toString(36).substr(2, 9),
-        preview: URL.createObjectURL(file)
-      }));
-    setImages(prev => [...prev, ...newImages]);
-  }, []);
+  const removeImage = (index: number) => {
+    setImages(prev => {
+      const newImages = prev.filter((_, i) => i !== index);
+      // Update order numbers
+      return newImages.map((img, i) => ({ ...img, order: i }));
+    });
+  };
 
-  // Remove image
-  const removeImage = useCallback((index: number) => {
+  const moveImage = (fromIndex: number, toIndex: number) => {
     setImages(prev => {
       const newImages = [...prev];
-      URL.revokeObjectURL(newImages[index].preview);
-      newImages.splice(index, 1);
-      return newImages;
+      const [movedImage] = newImages.splice(fromIndex, 1);
+      newImages.splice(toIndex, 0, movedImage);
+      // Update order numbers
+      return newImages.map((img, i) => ({ ...img, order: i }));
     });
-  }, []);
+  };
 
-  // Move image up/down
-  const moveImage = useCallback((index: number, direction: 'up' | 'down') => {
-    setImages(prev => {
-      const newImages = [...prev];
-      const newIndex = direction === 'up' ? index - 1 : index + 1;
-      if (newIndex >= 0 && newIndex < newImages.length) {
-        [newImages[index], newImages[newIndex]] = [newImages[newIndex], newImages[index]];
-      }
-      return newImages;
-    });
-  }, []);
-
-  // Show snackbar notification
-  const showNotification = useCallback((message: string, severity: 'success' | 'error') => {
-    setSnackbar({ open: true, message, severity });
-  }, []);
-
-  // Close snackbar
-  const handleCloseSnackbar = useCallback(() => {
-    setSnackbar(prev => ({ ...prev, open: false }));
-  }, []);
-
-  // Convert to PDF
-  const handleConvert = useCallback(async () => {
+  const handleConvert = async () => {
     if (images.length === 0) {
-      showNotification('Please add at least one image!', 'error');
+      setSnackbar({
+        open: true,
+        message: 'Please select at least one image',
+        severity: 'error'
+      });
       return;
     }
 
     setIsConverting(true);
     try {
-      const request = {
-        images: images.map(img => img.file),
-        outputFileName: outputFileName || 'images-to-pdf.pdf',
-        pageSize,
-      };
-
-      const result = await convertApi.execute(request);
+      const result = await convertApi.execute({ images: images.map(img => img.file).filter(Boolean) });
       
-      // Handle the response structure flexibly
-      const response = result.data;
-      
-      // Check if this is the flat structure (pdfContent directly in response.data)
-      if (response.success && response.pdfContent) {
-                 imageToPdfService.downloadPdf(
-           response.pdfContent, 
-           response.fileName || 'images-to-pdf.pdf'
-         );
-         showNotification(`Successfully converted ${response.imagesProcessed} image${response.imagesProcessed !== 1 ? 's' : ''} to PDF!`, 'success');
-      }
-      // Check if this is the nested structure (pdfContent in response.data.data)
-      else if (response.success && response.data && response.data.pdfContent) {
-                 imageToPdfService.downloadPdf(
-           response.data.pdfContent, 
-           response.data.fileName || 'images-to-pdf.pdf'
-         );
-         showNotification(`Successfully converted ${response.data.imagesProcessed} image${response.data.imagesProcessed !== 1 ? 's' : ''} to PDF!`, 'success');
-      }
-            else {
-        showNotification(response.error || response.message || 'Unknown error occurred', 'error');
+      if (result && result.data) {
+        imageToPdfService.downloadPdf(result.data.pdfContent || '', 'images-to-pdf.pdf');
+        setSnackbar({
+          open: true,
+          message: 'PDF generated and downloaded successfully!',
+          severity: 'success'
+        });
       }
     } catch (error) {
       console.error('Conversion error:', error);
-      showNotification('Network error: Please check if the backend server is running.', 'error');
+      setSnackbar({
+        open: true,
+        message: 'Failed to convert images to PDF. Please try again.',
+        severity: 'error'
+      });
     } finally {
       setIsConverting(false);
     }
-      }, [images, outputFileName, pageSize, convertApi, showNotification]);
+  };
 
-  // Clear all images
-  const clearAll = useCallback(() => {
-    images.forEach(img => URL.revokeObjectURL(img.preview));
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
+  const clearAll = () => {
     setImages([]);
-  }, [images]);
-
-  // Clean up object URLs on unmount
-  React.useEffect(() => {
-    return () => {
-      images.forEach(img => URL.revokeObjectURL(img.preview));
-    };
-  }, []);
+    convertApi.reset();
+  };
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
-        <ImageIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
         Image to PDF Converter
       </Typography>
       
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        Upload multiple images and convert them to a single PDF document.
+        Convert multiple images to a single PDF document. Drag and drop images or click to select files.
       </Typography>
 
-      {/* Upload Area */}
+      {/* Drop Zone */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-            sx={{
-              border: '2px dashed',
-              borderColor: dragActive ? 'primary.main' : 'grey.300',
-              borderRadius: 2,
-              p: 4,
+          <div
+            {...getRootProps()}
+            style={{
+              border: '2px dashed #ccc',
+              borderRadius: '8px',
+              padding: '40px',
               textAlign: 'center',
               cursor: 'pointer',
-              bgcolor: dragActive ? 'action.hover' : 'background.paper',
-              transition: 'all 0.2s ease-in-out',
-              '&:hover': {
-                borderColor: 'primary.main',
-                bgcolor: 'action.hover',
-              }
+              backgroundColor: isDragActive ? '#f0f8ff' : '#fafafa',
+              transition: 'background-color 0.3s ease'
             }}
           >
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              style={{ display: 'none' }}
-              id="image-upload"
-              onChange={handleFileSelect}
-            />
+            <input {...getInputProps()} />
             <CloudUpload sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
             <Typography variant="h6" gutterBottom>
-              {dragActive ? 'Drop images here...' : 'Drag & drop images here, or click to select'}
+              {isDragActive ? 'Drop images here' : 'Drag & drop images here'}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Supports JPG, PNG, BMP, GIF, WEBP
+            <Typography variant="body2" color="text.secondary">
+              or click to select files (JPEG, PNG, GIF, BMP, WebP)
             </Typography>
-            <label htmlFor="image-upload">
-              <Button variant="outlined" component="span">
-                Choose Files
-              </Button>
-            </label>
-          </Box>
+          </div>
         </CardContent>
       </Card>
 
-      {/* Settings */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Conversion Settings
-          </Typography>
-          
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={8}>
-              <TextField
-                fullWidth
-                label="Output Filename"
-                value={outputFileName}
-                onChange={(e) => setOutputFileName(e.target.value)}
-                placeholder="images-to-pdf.pdf"
-                helperText="Leave empty for default name"
-              />
-            </Grid>
-            
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth>
-                <InputLabel>Page Size</InputLabel>
-                <Select
-                  value={pageSize}
-                  label="Page Size"
-                  onChange={(e) => setPageSize(e.target.value)}
-                >
-                  <MenuItem value="auto">Auto (fit image)</MenuItem>
-                  <MenuItem value="A4">A4</MenuItem>
-                  <MenuItem value="Letter">Letter</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-      {/* Images List */}
+      {/* Image Preview */}
       {images.length > 0 && (
         <Card sx={{ mb: 3 }}>
           <CardContent>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Typography variant="h6">
-                Images ({images.length})
+                Selected Images ({images.length})
               </Typography>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <Chip 
-                  label={`${images.length} image${images.length !== 1 ? 's' : ''}`} 
-                  color="primary" 
-                  size="small" 
-                />
-                <Button onClick={clearAll} color="error" size="small">
-                  Clear All
-                </Button>
-              </Box>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={clearAll}
+                startIcon={<Delete />}
+              >
+                Clear All
+              </Button>
             </Box>
             
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Use the up/down buttons to reorder pages in the final PDF
-            </Typography>
-            
-            <List>
+            <Grid container spacing={2}>
               {images.map((image, index) => (
-                <ListItem key={image.id} sx={{ border: '1px solid', borderColor: 'divider', mb: 1, borderRadius: 1 }}>
-                  <img
-                    src={image.preview}
-                    alt={image.file.name}
-                    style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 4, marginRight: 16 }}
-                  />
-                  <ListItemText
-                    primary={image.file.name}
-                    secondary={`${(image.file.size / 1024 / 1024).toFixed(2)} MB`}
-                  />
-                  <ListItemSecondaryAction>
-                    <Button
-                      size="small"
-                      onClick={() => moveImage(index, 'up')}
-                      disabled={index === 0}
-                      sx={{ mr: 1 }}
-                    >
-                      ↑
-                    </Button>
-                    <Button
-                      size="small"
-                      onClick={() => moveImage(index, 'down')}
-                      disabled={index === images.length - 1}
-                      sx={{ mr: 1 }}
-                    >
-                      ↓
-                    </Button>
-                    <IconButton onClick={() => removeImage(index)} color="error" size="small">
-                      <Delete />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                  <Paper
+                    sx={{
+                      p: 2,
+                      textAlign: 'center',
+                      position: 'relative',
+                      border: '1px solid #e0e0e0'
+                    }}
+                  >
+                    <img
+                      src={image.preview}
+                      alt={`Image ${index + 1}`}
+                      style={{
+                        width: '100%',
+                        height: '150px',
+                        objectFit: 'cover',
+                        borderRadius: '4px'
+                      }}
+                    />
+                    <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+                      {image.file.name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {(image.file.size / 1024).toFixed(1)} KB
+                    </Typography>
+                    
+                    <Box sx={{ mt: 1 }}>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={() => removeImage(index)}
+                        startIcon={<Delete />}
+                        color="error"
+                      >
+                        Remove
+                      </Button>
+                    </Box>
+                  </Paper>
+                </Grid>
               ))}
-            </List>
+            </Grid>
           </CardContent>
         </Card>
       )}
@@ -374,7 +259,7 @@ const ImageToPdfTool: React.FC = () => {
           sx={{ width: '100%' }}
           iconMapping={{
             success: <CheckCircle fontSize="inherit" />,
-            error: <ErrorIcon fontSize="inherit" />,
+            error: <Error fontSize="inherit" />,
           }}
         >
           {snackbar.message}
@@ -384,7 +269,7 @@ const ImageToPdfTool: React.FC = () => {
       {/* Error Display for API errors */}
       {convertApi.error && (
         <Alert severity="error" sx={{ mt: 2 }}>
-          {convertApi.error}
+          {getErrorMessage(convertApi.error)}
         </Alert>
       )}
 

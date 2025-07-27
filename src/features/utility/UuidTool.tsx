@@ -12,6 +12,7 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const UuidTool: React.FC = () => {
   const [count, setCount] = useState(1);
@@ -27,22 +28,15 @@ const UuidTool: React.FC = () => {
     uuidApi.reset();
   };
 
-  const handleGenerateMultiple = () => {
-    // Generate multiple UUIDs by calling the API multiple times
-    const promises = Array.from({ length: count }, () => 
-      utilityService.generateUuid({ type })
-    );
-    
-    Promise.all(promises).then(results => {
-      // Store multiple results in a custom way since our API returns single UUID
-      const uuids = results.map(result => result.uuid).filter(Boolean);
-      // For now, just use the first result since our API doesn't support multiple
-      if (uuids.length > 0) {
-        uuidApi.execute({ type });
-      }
-    }).catch(error => {
-      console.error('Error generating multiple UUIDs:', error);
-    });
+  const handleGenerateMultiple = async () => {
+    try {
+      // For now, just generate one UUID since our API doesn't support multiple
+      // In the future, this could be enhanced to make multiple API calls
+      await uuidApi.execute({ type });
+    } catch (error) {
+      console.error('Error generating UUID:', error);
+      // Error is already handled by the useApi hook
+    }
   };
 
   return (
@@ -94,7 +88,7 @@ const UuidTool: React.FC = () => {
 
         {uuidApi.error && (
           <Alert severity="error" sx={{ mt: 2 }}>
-            {uuidApi.error}
+            {getErrorMessage(uuidApi.error)}
           </Alert>
         )}
       </ProfessionalCard>

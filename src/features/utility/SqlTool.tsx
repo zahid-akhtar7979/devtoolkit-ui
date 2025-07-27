@@ -13,6 +13,7 @@ import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
 import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const SqlTool: React.FC = () => {
   const [sql, setSql] = useState('');
@@ -97,15 +98,15 @@ const SqlTool: React.FC = () => {
 
           {sqlApi.error && (
             <Alert severity="error" sx={{ mt: 2 }}>
-              {sqlApi.error}
+              {getErrorMessage(sqlApi.error)}
             </Alert>
-        )}
+          )}
       </ProfessionalCard>
 
       {sqlApi.data && (
         <ResultCard
           title="Formatted SQL"
-          content={sqlApi.data.formatted || 'No formatted SQL'}
+          content={sqlApi.data.formatted || 'No result'}
         />
       )}
     </ProfessionalToolLayout>
