@@ -21,7 +21,7 @@ const UuidTool: React.FC = () => {
   const uuidApi = useApi(utilityService.generateUuid);
 
   const handleGenerate = () => {
-    uuidApi.execute({ type });
+    uuidApi.execute({ type, count: 1 });
   };
 
   const handleClear = () => {
@@ -30,9 +30,7 @@ const UuidTool: React.FC = () => {
 
   const handleGenerateMultiple = async () => {
     try {
-      // For now, just generate one UUID since our API doesn't support multiple
-      // In the future, this could be enhanced to make multiple API calls
-      await uuidApi.execute({ type });
+      await uuidApi.execute({ type, count });
     } catch (error) {
       console.error('Error generating UUID:', error);
       // Error is already handled by the useApi hook
@@ -96,7 +94,11 @@ const UuidTool: React.FC = () => {
       {uuidApi.data && (
         <ResultCard
           title={`Generated UUID${count > 1 ? 's' : ''} (${type.toUpperCase()})`}
-          content={uuidApi.data.uuid || 'No UUID generated'}
+          content={
+            uuidApi.data.uuids ? 
+              uuidApi.data.uuids.join('\n') : 
+              uuidApi.data.uuid || 'No UUID generated'
+          }
         />
       )}
     </ProfessionalToolLayout>

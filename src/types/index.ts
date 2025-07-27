@@ -83,6 +83,7 @@ export interface UtilityRequest {
   text2?: string;
   sql?: string;
   dialect?: string;
+  count?: number;
 }
 
 // Enhanced Diff types
@@ -167,6 +168,8 @@ export interface UtilityResponse {
   encoded?: string;
   decoded?: string;
   uuid?: string;
+  uuids?: string[];
+  count?: number;
   converted?: string;
   identical?: boolean;
   length1?: number;
