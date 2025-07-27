@@ -11,13 +11,16 @@ import {
   Divider,
   FormControlLabel,
   Checkbox,
+  Grid,
 } from '@mui/material';
+import CompareIcon from '@mui/icons-material/Compare';
 import { diffService } from '../../services/diffService';
 import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
 import { DiffRequest } from '../../types';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const DiffTool: React.FC = () => {
   const [text1, setText1] = useState('');
@@ -193,225 +196,194 @@ function divide(x, y) {
     const formatInfo = getFormatDisplayInfo();
 
     return (
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          mb: 3, 
-          borderRadius: 3,
-          overflow: 'hidden',
-          border: '2px solid #667eea',
-          boxShadow: '0 8px 32px rgba(102, 126, 234, 0.2)'
-        }}
-      >
-        {/* Enhanced Header */}
-        <Box sx={{ 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          textAlign: 'center',
-          py: 2
-        }}>
-          <Typography variant="h5" fontWeight="bold">
-            {formatInfo.icon} {formatInfo.title}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            {formatInfo.title}
           </Typography>
-        </Box>
 
-        {/* Column Headers */}
-        <Box sx={{ 
-          display: 'flex',
-          bgcolor: '#f8f9fa',
-          borderBottom: '2px solid #dee2e6'
-        }}>
+          {/* Column Headers */}
           <Box sx={{ 
-            flex: 1, 
-            p: 2, 
-            borderRight: '1px solid #dee2e6',
-            textAlign: 'center',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 1
+            bgcolor: '#f8f9fa',
+            borderBottom: '2px solid #dee2e6',
+            borderRadius: 1,
+            mb: 2
           }}>
             <Box sx={{ 
-              width: 10, 
-              height: 10, 
-              borderRadius: '50%', 
-              bgcolor: '#dc3545',
-              boxShadow: '0 0 10px rgba(220, 53, 69, 0.5)'
-            }} />
-            <Typography variant="subtitle1" fontWeight={700} color="#495057">
-              📄 Original {formatInfo.fileType}
-            </Typography>
-          </Box>
-          <Box sx={{ 
-            flex: 1, 
-            p: 2,
-            textAlign: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 1
-          }}>
-            <Box sx={{ 
-              width: 10, 
-              height: 10, 
-              borderRadius: '50%', 
-              bgcolor: '#28a745',
-              boxShadow: '0 0 10px rgba(40, 167, 69, 0.5)'
-            }} />
-            <Typography variant="subtitle1" fontWeight={700} color="#495057">
-              📄 Modified {formatInfo.fileType}
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Structurally Aligned Comparison */}
-        <Box sx={{ maxHeight: '600px', overflow: 'auto' }}>
-          {alignedDiff.map((diffLine, index) => (
-            <Box key={index} sx={{ 
-              display: 'flex',
-              minHeight: '24px',
-              '&:hover': {
-                bgcolor: 'rgba(102, 126, 234, 0.05)'
-              },
-              borderBottom: '1px solid #f1f3f4'
+              flex: 1, 
+              p: 2, 
+              borderRight: '1px solid #dee2e6',
+              textAlign: 'center'
             }}>
-              {/* Left side (Original) */}
-              <Box sx={{ 
-                flex: 1, 
-                display: 'flex',
-                borderRight: '1px solid #dee2e6',
-                bgcolor: diffLine.leftType === 'removed' ? '#fff5f5' : 
-                        diffLine.leftType === 'modified' ? '#fff9f9' : 'transparent'
-              }}>
-                {/* Line number */}
-                <Box sx={{ 
-                  minWidth: '50px',
-                  px: 1,
-                  py: 0.5,
-                  bgcolor: '#f8f9fa',
-                  borderRight: '1px solid #e9ecef',
-                  color: '#6c757d',
-                  fontSize: '12px',
-                  textAlign: 'right',
-                  fontFamily: 'monospace',
-                  userSelect: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  {diffLine.leftLineNum || ''}
-                </Box>
-                
-                {/* Content */}
-                <Box sx={{ 
-                  flex: 1,
-                  px: 2,
-                  py: 0.5,
-                  fontFamily: formatInfo.fontFamily,
-                  fontSize: '13px',
-                  lineHeight: 1.4,
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word',
-                  overflowWrap: 'break-word',
-                  overflow: 'hidden',
-                  maxWidth: 'calc(100% - 4px)',
-                  color: diffLine.leftType === 'removed' ? '#c62828' : 
-                         diffLine.leftType === 'modified' ? '#d84315' : '#495057'
-                }}>
-                  {diffLine.leftContent || ''}
-                </Box>
-              </Box>
-
-              {/* Right side (Modified) */}
-              <Box sx={{ 
-                flex: 1,
-                display: 'flex',
-                bgcolor: diffLine.rightType === 'added' ? '#f0f8f0' : 
-                        diffLine.rightType === 'modified' ? '#f9fff9' : 'transparent'
-              }}>
-                {/* Line number */}
-                <Box sx={{ 
-                  minWidth: '50px',
-                  px: 1,
-                  py: 0.5,
-                  bgcolor: '#f8f9fa',
-                  borderRight: '1px solid #e9ecef',
-                  color: '#6c757d',
-                  fontSize: '12px',
-                  textAlign: 'right',
-                  fontFamily: 'monospace',
-                  userSelect: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  {diffLine.rightLineNum || ''}
-                </Box>
-                
-                {/* Content */}
-                <Box sx={{ 
-                  flex: 1,
-                  px: 2,
-                  py: 0.5,
-                  fontFamily: formatInfo.fontFamily,
-                  fontSize: '13px',
-                  lineHeight: 1.4,
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word',
-                  overflowWrap: 'break-word',
-                  overflow: 'hidden',
-                  maxWidth: 'calc(100% - 4px)',
-                  color: diffLine.rightType === 'added' ? '#2e7d32' : 
-                         diffLine.rightType === 'modified' ? '#388e3c' : '#495057'
-                }}>
-                  {diffLine.rightContent || ''}
-                </Box>
-              </Box>
+              <Typography variant="subtitle1" fontWeight={600} color="#495057">
+                Original {formatInfo.fileType}
+              </Typography>
             </Box>
-          ))}
-        </Box>
+            <Box sx={{ 
+              flex: 1, 
+              p: 2,
+              textAlign: 'center'
+            }}>
+              <Typography variant="subtitle1" fontWeight={600} color="#495057">
+                Modified {formatInfo.fileType}
+              </Typography>
+            </Box>
+          </Box>
 
-        {/* Footer with legend */}
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'center',
-          gap: 3,
-          p: 2,
-          bgcolor: '#f8f9fa',
-          borderTop: '1px solid #dee2e6'
-        }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box sx={{ 
-              width: 16, 
-              height: 16, 
-              bgcolor: '#fff5f5', 
-              border: '1px solid #f44336',
-              borderRadius: 1 
-            }} />
-            <Typography variant="caption">Removed</Typography>
+          {/* Structurally Aligned Comparison */}
+          <Box sx={{ maxHeight: '600px', overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: 1 }}>
+            {alignedDiff.map((diffLine, index) => (
+              <Box key={index} sx={{ 
+                display: 'flex',
+                minHeight: '24px',
+                '&:hover': {
+                  bgcolor: 'action.hover'
+                },
+                borderBottom: '1px solid #f1f3f4'
+              }}>
+                {/* Left side (Original) */}
+                <Box sx={{ 
+                  flex: 1, 
+                  display: 'flex',
+                  borderRight: '1px solid #dee2e6',
+                  bgcolor: diffLine.leftType === 'removed' ? '#ffebee' : 
+                          diffLine.leftType === 'modified' ? '#fff3e0' : 'transparent'
+                }}>
+                  {/* Line number */}
+                  <Box sx={{ 
+                    minWidth: '50px',
+                    px: 1,
+                    py: 0.5,
+                    bgcolor: '#f8f9fa',
+                    borderRight: '1px solid #e9ecef',
+                    color: 'text.secondary',
+                    fontSize: '12px',
+                    textAlign: 'right',
+                    fontFamily: 'monospace',
+                    userSelect: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {diffLine.leftLineNum || ''}
+                  </Box>
+                  
+                  {/* Content */}
+                  <Box sx={{ 
+                    flex: 1,
+                    px: 2,
+                    py: 0.5,
+                    fontFamily: formatInfo.fontFamily,
+                    fontSize: '13px',
+                    lineHeight: 1.4,
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
+                    overflow: 'hidden',
+                    maxWidth: 'calc(100% - 4px)',
+                    color: diffLine.leftType === 'removed' ? 'error.main' : 
+                           diffLine.leftType === 'modified' ? 'warning.main' : 'text.primary'
+                  }}>
+                    {diffLine.leftContent || ''}
+                  </Box>
+                </Box>
+
+                {/* Right side (Modified) */}
+                <Box sx={{ 
+                  flex: 1,
+                  display: 'flex',
+                  bgcolor: diffLine.rightType === 'added' ? '#e8f5e8' : 
+                          diffLine.rightType === 'modified' ? '#fff3e0' : 'transparent'
+                }}>
+                  {/* Line number */}
+                  <Box sx={{ 
+                    minWidth: '50px',
+                    px: 1,
+                    py: 0.5,
+                    bgcolor: '#f8f9fa',
+                    borderRight: '1px solid #e9ecef',
+                    color: 'text.secondary',
+                    fontSize: '12px',
+                    textAlign: 'right',
+                    fontFamily: 'monospace',
+                    userSelect: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {diffLine.rightLineNum || ''}
+                  </Box>
+                  
+                  {/* Content */}
+                  <Box sx={{ 
+                    flex: 1,
+                    px: 2,
+                    py: 0.5,
+                    fontFamily: formatInfo.fontFamily,
+                    fontSize: '13px',
+                    lineHeight: 1.4,
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
+                    overflow: 'hidden',
+                    maxWidth: 'calc(100% - 4px)',
+                    color: diffLine.rightType === 'added' ? 'success.main' : 
+                           diffLine.rightType === 'modified' ? 'warning.main' : 'text.primary'
+                  }}>
+                    {diffLine.rightContent || ''}
+                  </Box>
+                </Box>
+              </Box>
+            ))}
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box sx={{ 
-              width: 16, 
-              height: 16, 
-              bgcolor: '#f0f8f0', 
-              border: '1px solid #4caf50',
-              borderRadius: 1 
-            }} />
-            <Typography variant="caption">Added</Typography>
+
+          {/* Footer with legend */}
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center',
+            gap: 3,
+            p: 2,
+            bgcolor: '#f8f9fa',
+            borderRadius: 1,
+            mt: 2
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ 
+                width: 16, 
+                height: 16, 
+                bgcolor: '#ffebee', 
+                border: '1px solid',
+                borderColor: 'error.main',
+                borderRadius: 1 
+              }} />
+              <Typography variant="caption">Removed</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ 
+                width: 16, 
+                height: 16, 
+                bgcolor: '#e8f5e8', 
+                border: '1px solid',
+                borderColor: 'success.main',
+                borderRadius: 1 
+              }} />
+              <Typography variant="caption">Added</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ 
+                width: 16, 
+                height: 16, 
+                bgcolor: '#fff3e0', 
+                border: '1px solid',
+                borderColor: 'warning.main',
+                borderRadius: 1 
+              }} />
+              <Typography variant="caption">Modified</Typography>
+            </Box>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Box sx={{ 
-              width: 16, 
-              height: 16, 
-              bgcolor: '#fff9f9', 
-              border: '1px solid #ff9800',
-              borderRadius: 1 
-            }} />
-            <Typography variant="caption">Modified</Typography>
-          </Box>
-        </Box>
-      </Paper>
+        </CardContent>
+      </Card>
     );
   };
 
@@ -1314,532 +1286,192 @@ function divide(x, y) {
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: '100%' }}>
-      {/* Enhanced Analysis Configuration Panel */}
-      <Paper 
-        elevation={4} 
-        sx={{ 
-          mb: 3, 
-          p: 4, 
-          borderRadius: 4,
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-            pointerEvents: 'none'
-          }
-        }}
-      >
-        <Box sx={{ position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-            <Box sx={{ 
-              width: 48, 
-              height: 48, 
-              borderRadius: '50%', 
-              bgcolor: 'rgba(255,255,255,0.2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px'
-            }}>
-              ⚙️
-            </Box>
-            <Box>
-              <Typography variant="h5" fontWeight="bold" sx={{ mb: 0.5 }}>
-                Analysis Configuration
-              </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                Customize comparison settings and options
-              </Typography>
-            </Box>
-          </Box>
+    <Box sx={{ p: 3 }}>
+      {/* Header Section */}
+      <Typography variant="h4" gutterBottom>
+        <CompareIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+        Advanced Diff Tool
+      </Typography>
+      
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+        Advanced text comparison with intelligent formatting detection for JSON, XML, code, and plain text.
+      </Typography>
+
+      {/* Configuration Panel */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            <CompareIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+            Comparison Settings
+          </Typography>
           
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', md: 'row' },
-            gap: 4, 
-            alignItems: { xs: 'stretch', md: 'center' } 
-          }}>
-            {/* Comparison Options */}
-            <Box sx={{ flex: 1 }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, opacity: 0.95 }}>
-                🎛️ Comparison Options
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                Comparison Options
               </Typography>
-              <Box sx={{ 
-                display: 'flex', 
-                flexDirection: { xs: 'column', sm: 'row' },
-                gap: 2,
-                flexWrap: 'wrap'
-              }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={diffOptions.ignoreCase}
                       onChange={(e) => setDiffOptions(prev => ({ ...prev, ignoreCase: e.target.checked }))}
-                      sx={{
-                        color: 'rgba(255,255,255,0.7)',
-                        '&.Mui-checked': {
-                          color: '#ffd700'
-                        },
-                        '& .MuiSvgIcon-root': {
-                          fontSize: 24,
-                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
-                        }
-                      }}
                     />
                   }
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="body1" fontWeight={500}>
-                        Case Insensitive
-                      </Typography>
-                      <Typography variant="caption" sx={{ 
-                        opacity: 0.8, 
-                        fontSize: '0.75rem',
-                        bgcolor: 'rgba(255,255,255,0.2)',
-                        px: 1,
-                        py: 0.25,
-                        borderRadius: 1
-                      }}>
-                        Aa = aa
-                      </Typography>
-                    </Box>
-                  }
-                  sx={{ 
-                    margin: 0,
-                    '& .MuiFormControlLabel-label': {
-                      fontSize: '0.95rem'
-                    }
-                  }}
+                  label="Case Insensitive"
                 />
-                
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={diffOptions.ignoreWhitespace}
                       onChange={(e) => setDiffOptions(prev => ({ ...prev, ignoreWhitespace: e.target.checked }))}
-                      sx={{
-                        color: 'rgba(255,255,255,0.7)',
-                        '&.Mui-checked': {
-                          color: '#ffd700'
-                        },
-                        '& .MuiSvgIcon-root': {
-                          fontSize: 24,
-                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
-                        }
-                      }}
                     />
                   }
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="body1" fontWeight={500}>
-                        Ignore Spaces
-                      </Typography>
-                      <Typography variant="caption" sx={{ 
-                        opacity: 0.8, 
-                        fontSize: '0.75rem',
-                        bgcolor: 'rgba(255,255,255,0.2)',
-                        px: 1,
-                        py: 0.25,
-                        borderRadius: 1
-                      }}>
-                        " " = ""
-                      </Typography>
-                    </Box>
-                  }
-                  sx={{ 
-                    margin: 0,
-                    '& .MuiFormControlLabel-label': {
-                      fontSize: '0.95rem'
-                    }
-                  }}
+                  label="Ignore Whitespace"
                 />
-
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={diffOptions.ignoreLineEndings}
                       onChange={(e) => setDiffOptions(prev => ({ ...prev, ignoreLineEndings: e.target.checked }))}
-                      sx={{
-                        color: 'rgba(255,255,255,0.7)',
-                        '&.Mui-checked': {
-                          color: '#ffd700'
-                        },
-                        '& .MuiSvgIcon-root': {
-                          fontSize: 24,
-                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))'
-                        }
-                      }}
                     />
                   }
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="body1" fontWeight={500}>
-                        Ignore Line Endings
-                      </Typography>
-                      <Typography variant="caption" sx={{ 
-                        opacity: 0.8, 
-                        fontSize: '0.75rem',
-                        bgcolor: 'rgba(255,255,255,0.2)',
-                        px: 1,
-                        py: 0.25,
-                        borderRadius: 1
-                      }}>
-                        \\n = \\r\\n
-                      </Typography>
-                    </Box>
-                  }
-                  sx={{ 
-                    margin: 0,
-                    '& .MuiFormControlLabel-label': {
-                      fontSize: '0.95rem'
-                    }
-                  }}
+                  label="Ignore Line Endings"
                 />
               </Box>
-            </Box>
+            </Grid>
             
-            {/* Sample Data */}
-            <Box sx={{ 
-              borderLeft: { xs: 'none', md: '1px solid rgba(255,255,255,0.3)' },
-              borderTop: { xs: '1px solid rgba(255,255,255,0.3)', md: 'none' },
-              pl: { xs: 0, md: 4 },
-              pt: { xs: 3, md: 0 },
-              minWidth: { md: '280px' }
-            }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, opacity: 0.95 }}>
-                🎯 Quick Start Samples
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 600 }}>
+                Quick Start Samples
               </Typography>
-              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip
-                  label="📝 Sample Text"
+                  label="Sample Text"
                   onClick={handleSample}
                   variant="outlined"
-                  sx={{ 
-                    color: 'white',
-                    borderColor: 'rgba(255,255,255,0.5)',
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    px: 2,
-                    py: 0.5,
-                    '&:hover': { 
-                      bgcolor: 'rgba(255,255,255,0.15)',
-                      borderColor: 'rgba(255,255,255,0.8)',
-                      transform: 'translateY(-1px)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                    },
-                    transition: 'all 0.2s ease'
-                  }}
+                  clickable
                 />
                 <Chip
-                  label="🗂️ JSON Demo"
+                  label="JSON Demo"
                   onClick={handleJsonSample}
                   variant="outlined"
-                  sx={{ 
-                    color: 'white',
-                    borderColor: 'rgba(255,255,255,0.5)',
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    px: 2,
-                    py: 0.5,
-                    '&:hover': { 
-                      bgcolor: 'rgba(255,255,255,0.15)',
-                      borderColor: 'rgba(255,255,255,0.8)',
-                      transform: 'translateY(-1px)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                    },
-                    transition: 'all 0.2s ease'
-                  }}
+                  clickable
                 />
                 <Chip
-                  label="💻 Code Sample"
+                  label="Code Sample"
                   onClick={handleCodeSample}
                   variant="outlined"
-                  sx={{ 
-                    color: 'white',
-                    borderColor: 'rgba(255,255,255,0.5)',
-                    cursor: 'pointer',
-                    fontWeight: 500,
-                    px: 2,
-                    py: 0.5,
-                    '&:hover': { 
-                      bgcolor: 'rgba(255,255,255,0.15)',
-                      borderColor: 'rgba(255,255,255,0.8)',
-                      transform: 'translateY(-1px)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-                    },
-                    transition: 'all 0.2s ease'
-                  }}
+                  clickable
                 />
               </Box>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      {/* Input Section */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>Input Documents</Typography>
+          
+          <Box sx={{ display: 'flex', gap: 2, minHeight: '400px', position: 'relative' }}>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Source Document</Typography>
+              <TextField
+                multiline
+                rows={16}
+                value={text1}
+                onChange={(e) => setText1(e.target.value)}
+                placeholder="Paste your original text, JSON, XML, or code here..."
+                variant="outlined"
+                fullWidth
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    fontFamily: 'monospace',
+                    fontSize: '14px'
+                  }
+                }}
+              />
+            </Box>
+
+            {/* Swap Button */}
+            <Box sx={{ 
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              px: 1
+            }}>
+                             <LoadingButton
+                 onClick={handleSwap}
+                 loading={false}
+                 variant="outlined"
+                 size="small"
+                 disabled={!text1.trim() && !text2.trim()}
+                 sx={{ minWidth: '40px', fontSize: '16px' }}
+               >
+                 ⇄
+               </LoadingButton>
+            </Box>
+
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Target Document</Typography>
+              <TextField
+                multiline
+                rows={16}
+                value={text2}
+                onChange={(e) => setText2(e.target.value)}
+                placeholder="Paste your modified text, JSON, XML, or code here..."
+                variant="outlined"
+                fullWidth
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    fontFamily: 'monospace',
+                    fontSize: '14px'
+                  }
+                }}
+              />
             </Box>
           </Box>
-        </Box>
-      </Paper>
 
-      {/* Unique Input Layout */}
-      <Paper 
-        elevation={2} 
-        sx={{ 
-          mb: 3, 
-          borderRadius: 3,
-          overflow: 'hidden',
-          border: '2px solid #e9ecef'
-        }}
-      >
-        {/* Input Headers with Icon Indicators */}
-        <Box sx={{ 
-          display: 'flex', 
-          bgcolor: 'linear-gradient(90deg, #f1f3f4 0%, #f8f9fa 50%, #f1f3f4 100%)',
-          borderBottom: '2px solid #dee2e6'
-        }}>
-          <Box sx={{ 
-            flex: 1, 
-            p: 2, 
-            borderRight: '1px solid #dee2e6',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1
-          }}>
-            <Box sx={{ 
-              width: 8, 
-              height: 8, 
-              borderRadius: '50%', 
-              bgcolor: '#dc3545',
-              boxShadow: '0 0 8px rgba(220, 53, 69, 0.4)'
-            }} />
-            <Typography variant="subtitle1" fontWeight={600} color="#495057">
-              📄 Source Document
-            </Typography>
-          </Box>
-          <Box sx={{ 
-            flex: 1, 
-            p: 2,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1
-          }}>
-            <Box sx={{ 
-              width: 8, 
-              height: 8, 
-              borderRadius: '50%', 
-              bgcolor: '#28a745',
-              boxShadow: '0 0 8px rgba(40, 167, 69, 0.4)'
-            }} />
-            <Typography variant="subtitle1" fontWeight={600} color="#495057">
-              📄 Target Document
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Text Input Areas with Swap Button */}
-        <Box sx={{ display: 'flex', minHeight: '400px', position: 'relative' }}>
-          <Box sx={{ flex: 1, borderRight: '1px solid #dee2e6' }}>
-            <TextField
-              multiline
-              rows={18}
-              value={text1}
-              onChange={(e) => setText1(e.target.value)}
-              placeholder="Paste your original text, JSON, XML, or code here..."
-              variant="outlined"
-              fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 0,
-                  border: 'none',
-                  fontFamily: 'Fira Code, Monaco, Consolas, monospace',
-                  fontSize: '14px',
-                  '& fieldset': { border: 'none' },
-                  '&:hover fieldset': { border: 'none' },
-                  '&.Mui-focused fieldset': { border: 'none' },
-                  bgcolor: '#fafbfc'
-                },
-                '& .MuiInputBase-input': {
-                  padding: '16px !important'
-                }
-              }}
-            />
-          </Box>
-
-          {/* Swap Button */}
-          <Box sx={{ 
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 10
-          }}>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 3 }}>
             <LoadingButton
-              onClick={handleSwap}
-              loading={false}
-              variant="contained"
-              size="small"
+              onClick={handleCompare}
+              loading={diffApi.loading}
               disabled={!text1.trim() && !text2.trim()}
-              sx={{
-                minWidth: '48px',
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                backgroundColor: '#667eea !important',
-                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
-                '&:hover': {
-                  backgroundColor: '#5a67d8 !important',
-                  boxShadow: '0 6px 16px rgba(102, 126, 234, 0.4)',
-                  transform: 'scale(1.05)'
-                },
-                '&:disabled': {
-                  backgroundColor: '#e2e8f0 !important',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                },
-                transition: 'all 0.2s ease'
-              }}
-              title="Swap left and right content"
+              variant="contained"
+              size="large"
+              sx={{ px: 4, py: 1.5 }}
             >
-              ⇄
+              Analyze Differences
             </LoadingButton>
+            
+                         <LoadingButton
+               onClick={handleClear}
+               loading={false}
+               variant="outlined"
+               size="large"
+               sx={{ px: 4, py: 1.5 }}
+             >
+               Clear All
+             </LoadingButton>
           </Box>
-
-          <Box sx={{ flex: 1 }}>
-            <TextField
-              multiline
-              rows={18}
-              value={text2}
-              onChange={(e) => setText2(e.target.value)}
-              placeholder="Paste your modified text, JSON, XML, or code here..."
-              variant="outlined"
-              fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: 0,
-                  border: 'none',
-                  fontFamily: 'Fira Code, Monaco, Consolas, monospace',
-                  fontSize: '14px',
-                  '& fieldset': { border: 'none' },
-                  '&:hover fieldset': { border: 'none' },
-                  '&.Mui-focused fieldset': { border: 'none' },
-                  bgcolor: '#f8f9fa'
-                },
-                '& .MuiInputBase-input': {
-                  padding: '16px !important'
-                }
-              }}
-            />
-          </Box>
-        </Box>
-      </Paper>
-
-      {/* Action Buttons with Unique Styling */}
-      <Paper 
-        elevation={1} 
-        sx={{ 
-          p: 2, 
-          mb: 3, 
-          borderRadius: 3,
-          background: 'linear-gradient(45deg, #ffffff 30%, #f8f9fa 90%)',
-          border: '1px solid #e9ecef'
-        }}
-      >
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <LoadingButton
-            onClick={handleCompare}
-            loading={diffApi.loading}
-            disabled={!text1.trim() && !text2.trim()}
-            variant="outlined"
-            size="large"
-            sx={{
-              borderRadius: 3,
-              px: 4,
-              py: 1.5,
-              borderColor: '#6c757d !important',
-              borderWidth: '1px !important',
-              color: '#6c757d !important',
-              backgroundColor: 'transparent !important',
-              '&:hover': {
-                borderColor: '#5a6268 !important',
-                borderWidth: '1px !important',
-                color: '#5a6268 !important',
-                bgcolor: 'rgba(108, 117, 125, 0.04) !important'
-              },
-              '&:disabled': {
-                borderColor: '#6c757d !important',
-                borderWidth: '1px !important',
-                color: '#6c757d !important',
-                backgroundColor: 'transparent !important',
-                opacity: 0.6
-              },
-              '&.Mui-disabled': {
-                borderColor: '#6c757d !important',
-                color: '#6c757d !important'
-              }
-            }}
-          >
-            🔍 Analyze Differences
-          </LoadingButton>
-          
-          <LoadingButton
-            onClick={handleClear}
-            loading={false}
-            variant="outlined"
-            size="large"
-            sx={{
-              borderRadius: 3,
-              px: 4,
-              py: 1.5,
-              borderColor: '#6c757d !important',
-              borderWidth: '1px !important',
-              color: '#6c757d !important',
-              backgroundColor: 'transparent !important',
-              '&:hover': {
-                borderColor: '#5a6268 !important',
-                borderWidth: '1px !important',
-                color: '#5a6268 !important',
-                bgcolor: 'rgba(108, 117, 125, 0.04) !important'
-              }
-            }}
-          >
-            🗑️ Clear All
-          </LoadingButton>
-        </Box>
-      </Paper>
+        </CardContent>
+      </Card>
 
       {/* Error Display */}
       {diffApi.error && (
-        <Alert 
-          severity="error" 
-          sx={{ 
-            mb: 3, 
-            borderRadius: 3,
-            '& .MuiAlert-icon': {
-              fontSize: '1.5rem'
-            }
-          }}
-        >
-          ❌ {diffApi.error}
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {getErrorMessage(diffApi.error)}
         </Alert>
       )}
 
       {diffApi.data && (
         <>
           {diffApi.data.identical ? (
-            <Alert 
-              severity="success" 
-              sx={{ 
-                mb: 3, 
-                borderRadius: 3,
-                '& .MuiAlert-icon': {
-                  fontSize: '1.5rem'
-                }
-              }}
-            >
-              ✅ The texts are identical! No differences found.
+            <Alert severity="success" sx={{ mb: 3 }}>
+              The texts are identical! No differences found.
             </Alert>
           ) : (
             <>
@@ -1849,6 +1481,23 @@ function divide(x, y) {
           )}
         </>
       )}
+
+      {/* Help */}
+      <Card sx={{ bgcolor: 'action.hover' }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            How to use:
+          </Typography>
+          <Typography component="div" variant="body2">
+            <ol style={{ paddingLeft: 20, margin: 0 }}>
+              <li>Configure comparison options to ignore case, whitespace, or line endings</li>
+              <li>Paste your original and modified content, or use sample data</li>
+              <li>Click "Analyze Differences" to see a detailed side-by-side comparison</li>
+              <li>The tool automatically detects JSON, XML, code, and plain text formats</li>
+            </ol>
+          </Typography>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

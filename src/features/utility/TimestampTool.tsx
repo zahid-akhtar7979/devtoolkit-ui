@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,6 +12,8 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const TimestampTool: React.FC = () => {
   const [input, setInput] = useState('');
@@ -42,66 +40,63 @@ const TimestampTool: React.FC = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Unix Timestamp Converter
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Convert Type</InputLabel>
-            <Select
-              value={format}
-              label="Convert Type"
-              onChange={(e) => setFormat(e.target.value)}
-            >
-              <MenuItem value="timestamp">Timestamp to Date</MenuItem>
-              <MenuItem value="date">Date to Timestamp</MenuItem>
-            </Select>
-          </FormControl>
+    <ProfessionalToolLayout 
+      title="Unix Timestamp Converter"
+      description="Convert between Unix timestamps and human-readable dates"
+    >
+      <ProfessionalCard title="Input">
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Convert Type</InputLabel>
+          <Select
+            value={format}
+            label="Convert Type"
+            onChange={(e) => setFormat(e.target.value)}
+          >
+            <MenuItem value="timestamp">Timestamp to Date</MenuItem>
+            <MenuItem value="date">Date to Timestamp</MenuItem>
+          </Select>
+        </FormControl>
 
-          <TextField
-            fullWidth
-            label={format === 'timestamp' ? 'Unix Timestamp' : 'Date (YYYY-MM-DD HH:mm:ss)'}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={format === 'timestamp' ? 'e.g., 1640995200' : 'e.g., 2022-01-01 00:00:00'}
-            sx={{ mb: 2 }}
-          />
+        <TextField
+          fullWidth
+          label={format === 'timestamp' ? 'Unix Timestamp' : 'Date (YYYY-MM-DD HH:mm:ss)'}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={format === 'timestamp' ? 'e.g., 1640995200' : 'e.g., 2022-01-01 00:00:00'}
+          sx={{ mb: 2 }}
+        />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <LoadingButton
-              variant="contained"
-              loading={timestampApi.loading}
-              onClick={handleConvert}
-              disabled={!validation.isNotEmpty(input)}
-            >
-              Convert
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleCurrentTimestamp}
-            >
-              Current Timestamp
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleClear}
-            >
-              Clear
-            </LoadingButton>
-          </Box>
+        <ProfessionalButtonGroup>
+          <LoadingButton
+            variant="contained"
+            loading={timestampApi.loading}
+            onClick={handleConvert}
+            disabled={!validation.isNotEmpty(input)}
+          >
+            Convert
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleCurrentTimestamp}
+          >
+            Current Timestamp
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleClear}
+          >
+            Clear
+          </LoadingButton>
+        </ProfessionalButtonGroup>
 
-          {timestampApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {timestampApi.error}
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
+        {timestampApi.error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {getErrorMessage(timestampApi.error)}
+          </Alert>
+        )}
+      </ProfessionalCard>
 
       {timestampApi.data && (
         <ResultCard
@@ -109,7 +104,7 @@ const TimestampTool: React.FC = () => {
           content={timestampApi.data.converted || 'No result'}
         />
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 

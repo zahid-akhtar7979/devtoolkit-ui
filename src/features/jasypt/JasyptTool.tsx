@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,6 +12,8 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const JasyptTool: React.FC = () => {
   const [text, setText] = useState('');
@@ -49,87 +47,82 @@ const JasyptTool: React.FC = () => {
   const result = currentApi.data;
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Jasypt Encryption/Decryption
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>Operation</InputLabel>
-              <Select
-                value={operation}
-                label="Operation"
-                onChange={(e) => setOperation(e.target.value)}
-              >
-                <MenuItem value="encrypt">Encrypt</MenuItem>
-                <MenuItem value="decrypt">Decrypt</MenuItem>
-              </Select>
-            </FormControl>
+    <ProfessionalToolLayout 
+      title="Jasypt Encryptor/Decryptor"
+      description="Encrypt and decrypt text using Jasypt with various algorithms"
+    >
+      <ProfessionalCard title="Input">
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Operation</InputLabel>
+          <Select
+            value={operation}
+            label="Operation"
+            onChange={(e) => setOperation(e.target.value)}
+          >
+            <MenuItem value="encrypt">Encrypt</MenuItem>
+            <MenuItem value="decrypt">Decrypt</MenuItem>
+          </Select>
+        </FormControl>
 
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>Algorithm</InputLabel>
-              <Select
-                value={algorithm}
-                label="Algorithm"
-                onChange={(e) => setAlgorithm(e.target.value)}
-              >
-                <MenuItem value="PBEWithMD5AndDES">PBEWithMD5AndDES</MenuItem>
-                <MenuItem value="PBEWithSHA1AndDESede">PBEWithSHA1AndDESede</MenuItem>
-                <MenuItem value="PBEWithSHA1AndAES_128">PBEWithSHA1AndAES_128</MenuItem>
-                <MenuItem value="PBEWithSHA1AndAES_256">PBEWithSHA1AndAES_256</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Algorithm</InputLabel>
+          <Select
+            value={algorithm}
+            label="Algorithm"
+            onChange={(e) => setAlgorithm(e.target.value)}
+          >
+            <MenuItem value="PBEWithMD5AndDES">PBEWithMD5AndDES</MenuItem>
+            <MenuItem value="PBEWithMD5AndTripleDES">PBEWithMD5AndTripleDES</MenuItem>
+            <MenuItem value="PBEWithSHA1AndDESede">PBEWithSHA1AndDESede</MenuItem>
+            <MenuItem value="PBEWithSHA1AndRC2_40">PBEWithSHA1AndRC2_40</MenuItem>
+          </Select>
+        </FormControl>
 
-          <TextField
-            fullWidth
-            multiline
-            rows={6}
-            label={`Text to ${operation}`}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder={`Enter text to ${operation}...`}
-            sx={{ mb: 2 }}
-          />
+        <TextField
+          fullWidth
+          multiline
+          rows={4}
+          label="Text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder={operation === 'encrypt' ? 'Enter text to encrypt...' : 'Enter encrypted text to decrypt...'}
+          sx={{ mb: 2 }}
+        />
 
-          <TextField
-            fullWidth
-            type="password"
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password..."
-            sx={{ mb: 2 }}
-          />
+        <TextField
+          fullWidth
+          type="password"
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter password..."
+          sx={{ mb: 2 }}
+        />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <LoadingButton
-              variant="contained"
-              loading={currentApi.loading}
-              onClick={handleProcess}
-              disabled={!validation.isNotEmpty(text) || !validation.isNotEmpty(password)}
-            >
-              {operation === 'encrypt' ? 'Encrypt' : 'Decrypt'}
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleClear}
-            >
-              Clear
-            </LoadingButton>
-          </Box>
+        <ProfessionalButtonGroup>
+          <LoadingButton
+            variant="contained"
+            loading={currentApi.loading}
+            onClick={handleProcess}
+            disabled={!validation.isNotEmpty(text) || !validation.isNotEmpty(password)}
+          >
+            {operation === 'encrypt' ? 'Encrypt' : 'Decrypt'}
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleClear}
+          >
+            Clear
+          </LoadingButton>
+        </ProfessionalButtonGroup>
 
-          {currentApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {currentApi.error}
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
+        {currentApi.error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {getErrorMessage(currentApi.error)}
+          </Alert>
+        )}
+      </ProfessionalCard>
 
       {result && (
         <ResultCard
@@ -137,7 +130,7 @@ const JasyptTool: React.FC = () => {
           content={operation === 'encrypt' ? result.encrypted || '' : result.decrypted || ''}
         />
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 

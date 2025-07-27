@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,6 +12,8 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const HashTool: React.FC = () => {
   const [text, setText] = useState('');
@@ -45,64 +43,61 @@ const HashTool: React.FC = () => {
   ];
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Hash Generator
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <TextField
-            fullWidth
-            multiline
-            rows={6}
-            label="Text to Hash"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Enter text to generate hash..."
-            sx={{ mb: 2 }}
-          />
+    <ProfessionalToolLayout 
+      title="Hash Generator"
+      description="Generate cryptographic hashes using various algorithms like MD5, SHA-1, SHA-256, and SHA-512"
+    >
+      <ProfessionalCard title="Input">
+        <TextField
+          fullWidth
+          multiline
+          rows={6}
+          label="Text to Hash"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Enter text to generate hash..."
+          sx={{ mb: 2 }}
+        />
 
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Algorithm</InputLabel>
-            <Select
-              value={algorithm}
-              label="Algorithm"
-              onChange={(e) => setAlgorithm(e.target.value)}
-            >
-              {algorithms.map((algo) => (
-                <MenuItem key={algo.value} value={algo.value}>
-                  {algo.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Algorithm</InputLabel>
+          <Select
+            value={algorithm}
+            label="Algorithm"
+            onChange={(e) => setAlgorithm(e.target.value)}
+          >
+            {algorithms.map((algo) => (
+              <MenuItem key={algo.value} value={algo.value}>
+                {algo.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <LoadingButton
-              variant="contained"
-              loading={hashApi.loading}
-              onClick={handleGenerate}
-              disabled={!validation.isNotEmpty(text)}
-            >
-              Generate Hash
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleClear}
-            >
-              Clear
-            </LoadingButton>
-          </Box>
+        <ProfessionalButtonGroup>
+          <LoadingButton
+            variant="contained"
+            loading={hashApi.loading}
+            onClick={handleGenerate}
+            disabled={!validation.isNotEmpty(text)}
+          >
+            Generate Hash
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleClear}
+          >
+            Clear
+          </LoadingButton>
+        </ProfessionalButtonGroup>
 
-          {hashApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {hashApi.error}
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
+        {hashApi.error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {getErrorMessage(hashApi.error)}
+          </Alert>
+        )}
+      </ProfessionalCard>
 
       {hashApi.data && (
         <>
@@ -111,18 +106,18 @@ const HashTool: React.FC = () => {
               title={`${hashApi.data.algorithm} Hash`}
               content={hashApi.data.hash}
             />
-                     ) : hashApi.data.hashes ? (
-             Object.entries(hashApi.data.hashes).map(([algo, hash]) => (
-               <ResultCard
-                 key={algo}
-                 title={`${algo} Hash`}
-                 content={String(hash)}
-               />
-             ))
-           ) : null}
+          ) : hashApi.data.hashes ? (
+            Object.entries(hashApi.data.hashes).map(([algo, hash]) => (
+              <ResultCard
+                key={algo}
+                title={`${algo} Hash`}
+                content={String(hash)}
+              />
+            ))
+          ) : null}
         </>
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 

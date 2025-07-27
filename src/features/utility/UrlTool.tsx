@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,6 +12,8 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const UrlTool: React.FC = () => {
   const [url, setUrl] = useState('');
@@ -46,61 +44,58 @@ const UrlTool: React.FC = () => {
   const result = currentApi.data;
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        URL Encoder/Decoder
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Operation</InputLabel>
-            <Select
-              value={operation}
-              label="Operation"
-              onChange={(e) => setOperation(e.target.value)}
-            >
-              <MenuItem value="encode">Encode</MenuItem>
-              <MenuItem value="decode">Decode</MenuItem>
-            </Select>
-          </FormControl>
+    <ProfessionalToolLayout 
+      title="URL Encoder/Decoder"
+      description="Encode URLs for safe transmission or decode encoded URLs back to readable format"
+    >
+      <ProfessionalCard title="Input">
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Operation</InputLabel>
+          <Select
+            value={operation}
+            label="Operation"
+            onChange={(e) => setOperation(e.target.value)}
+          >
+            <MenuItem value="encode">Encode</MenuItem>
+            <MenuItem value="decode">Decode</MenuItem>
+          </Select>
+        </FormControl>
 
-          <TextField
-            fullWidth
-            multiline
-            rows={6}
-            label={`URL to ${operation}`}
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder={operation === 'encode' ? 'Enter URL to encode...' : 'Enter encoded URL to decode...'}
-            sx={{ mb: 2 }}
-          />
+        <TextField
+          fullWidth
+          multiline
+          rows={6}
+          label={`URL to ${operation}`}
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder={operation === 'encode' ? 'Enter URL to encode...' : 'Enter encoded URL to decode...'}
+          sx={{ mb: 2 }}
+        />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <LoadingButton
-              variant="contained"
-              loading={currentApi.loading}
-              onClick={handleProcess}
-              disabled={!validation.isNotEmpty(url)}
-            >
-              {operation === 'encode' ? 'Encode' : 'Decode'} URL
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleClear}
-            >
-              Clear
-            </LoadingButton>
-          </Box>
+        <ProfessionalButtonGroup>
+          <LoadingButton
+            variant="contained"
+            loading={currentApi.loading}
+            onClick={handleProcess}
+            disabled={!validation.isNotEmpty(url)}
+          >
+            {operation === 'encode' ? 'Encode' : 'Decode'} URL
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleClear}
+          >
+            Clear
+          </LoadingButton>
+        </ProfessionalButtonGroup>
 
-          {currentApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {currentApi.error}
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
+        {currentApi.error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {getErrorMessage(currentApi.error)}
+          </Alert>
+        )}
+      </ProfessionalCard>
 
       {result && (
         <ResultCard
@@ -108,7 +103,7 @@ const UrlTool: React.FC = () => {
           content={operation === 'encode' ? result.encoded || '' : result.decoded || ''}
         />
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 

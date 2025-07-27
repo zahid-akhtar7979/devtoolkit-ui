@@ -13,6 +13,10 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['pdfjs-dist'],
+    include: ['pdf-lib', 'react-pdf', 'pdfjs-dist'],
+  },
+  assetsInclude: ['**/*.pdf'],
+  worker: {
+    format: 'es'
   },
 }); 
