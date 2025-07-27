@@ -20,6 +20,7 @@ import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
 import { DiffRequest } from '../../types';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const DiffTool: React.FC = () => {
   const [text1, setText1] = useState('');
@@ -1462,7 +1463,7 @@ function divide(x, y) {
       {/* Error Display */}
       {diffApi.error && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          {diffApi.error}
+          {getErrorMessage(diffApi.error)}
         </Alert>
       )}
 

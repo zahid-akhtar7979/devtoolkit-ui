@@ -23,7 +23,9 @@ export function useApi<T, P = any>(apiFunction: (params: P) => Promise<T>) {
     } catch (error) {
       // Store the entire error object so we can access response data later
       setState({ data: null, loading: false, error: error as any });
-      throw error;
+      // Don't throw the error to prevent unhandled promise rejections
+      // The error is already stored in state and can be accessed via the hook
+      return null;
     }
   }, [apiFunction]);
 

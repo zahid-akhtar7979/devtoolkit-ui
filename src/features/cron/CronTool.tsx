@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import {
-  Box,
+  TextField,
+  Alert,
   Card,
   CardContent,
   Typography,
-  TextField,
-  Alert,
   List,
   ListItem,
   ListItemText,
   Chip,
+  Box,
 } from '@mui/material';
 import { cronService } from '../../services/cronService';
 import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const CronTool: React.FC = () => {
   const [cronExpression, setCronExpression] = useState('');
@@ -34,118 +36,89 @@ const CronTool: React.FC = () => {
     cronApi.reset();
   };
 
-  const handleSample = (sample: string) => {
-    setCronExpression(sample);
+  const handleSample = () => {
+    setCronExpression('0 0 * * *');
   };
 
-  const samples = [
-    { label: 'Every minute', expression: '* * * * *' },
-    { label: 'Every 5 minutes', expression: '*/5 * * * *' },
-    { label: 'Every hour', expression: '0 * * * *' },
-    { label: 'Daily at 2:30 AM', expression: '30 2 * * *' },
-    { label: 'Weekly on Sunday', expression: '0 0 * * 0' },
-    { label: 'Monthly on 1st', expression: '0 0 1 * *' },
-  ];
-
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        CRON Expression Evaluator
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <TextField
-            fullWidth
-            label="CRON Expression"
-            value={cronExpression}
-            onChange={(e) => setCronExpression(e.target.value)}
-            placeholder="* * * * *"
-            sx={{ mb: 2 }}
-          />
+    <ProfessionalToolLayout 
+      title="CRON Expression Evaluator"
+      description="Evaluate and understand CRON expressions with detailed descriptions and next execution times"
+    >
+      <ProfessionalCard title="Input">
+        <TextField
+          fullWidth
+          label="CRON Expression"
+          value={cronExpression}
+          onChange={(e) => setCronExpression(e.target.value)}
+          placeholder="e.g., 0 0 * * * (daily at midnight)"
+          sx={{ mb: 2 }}
+        />
 
-          <Typography variant="subtitle2" gutterBottom>
-            Quick Samples:
-          </Typography>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-            {samples.map((sample, index) => (
-              <Chip
-                key={index}
-                label={sample.label}
-                onClick={() => handleSample(sample.expression)}
-                variant="outlined"
-                sx={{ cursor: 'pointer' }}
-              />
-            ))}
-          </Box>
+        <ProfessionalButtonGroup>
+          <LoadingButton
+            variant="contained"
+            loading={cronApi.loading}
+            onClick={handleEvaluate}
+            disabled={!validation.isNotEmpty(cronExpression)}
+          >
+            Evaluate CRON
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleSample}
+          >
+            Load Sample
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleClear}
+          >
+            Clear
+          </LoadingButton>
+        </ProfessionalButtonGroup>
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <LoadingButton
-              variant="contained"
-              loading={cronApi.loading}
-              onClick={handleEvaluate}
-              disabled={!validation.isNotEmpty(cronExpression)}
-            >
-              Evaluate CRON
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleClear}
-            >
-              Clear
-            </LoadingButton>
-          </Box>
-
-          {cronApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {cronApi.error}
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
+        {cronApi.error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {getErrorMessage(cronApi.error)}
+          </Alert>
+        )}
+      </ProfessionalCard>
 
       {cronApi.data && (
-        <Card>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>Evaluation Result</Typography>
-            
-            <ResultCard
-              title="Description"
-              content={cronApi.data.description || 'No description available'}
-              showCopyButton={true}
-            />
+        <>
+          <ResultCard
+            title="Description"
+            content={cronApi.data.description || 'No description available'}
+          />
 
-            <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
-              Next 5 Executions:
-            </Typography>
-            <List>
-              {cronApi.data.nextExecutions?.map((execution: string, index: number) => (
-                <ListItem
-                  key={index}
-                  sx={{
-                    border: '1px solid #e0e0e0',
-                    borderRadius: 1,
-                    mb: 1,
-                    backgroundColor: '#f5f5f5'
-                  }}
-                >
-                  <ListItemText
-                    primary={execution}
-                    sx={{
-                      '& .MuiListItemText-primary': {
-                        fontFamily: 'monospace',
-                        fontSize: '1rem'
-                      }
-                    }}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </CardContent>
-        </Card>
+          <Card sx={{ mb: 2 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Next 5 Executions
+              </Typography>
+              <List dense>
+                {cronApi.data.nextExecutions?.map((execution, index) => (
+                  <ListItem key={index}>
+                    <ListItemText 
+                      primary={execution}
+                      secondary={`Execution #${index + 1}`}
+                    />
+                    <Chip 
+                      label={index === 0 ? 'Next' : `#${index + 1}`}
+                      color={index === 0 ? 'primary' : 'default'}
+                      size="small"
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        </>
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 

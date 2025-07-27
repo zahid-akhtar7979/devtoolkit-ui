@@ -13,6 +13,7 @@ import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
 import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const UrlTool: React.FC = () => {
   const [url, setUrl] = useState('');
@@ -91,7 +92,7 @@ const UrlTool: React.FC = () => {
 
         {currentApi.error && (
           <Alert severity="error" sx={{ mt: 2 }}>
-            {currentApi.error}
+            {getErrorMessage(currentApi.error)}
           </Alert>
         )}
       </ProfessionalCard>

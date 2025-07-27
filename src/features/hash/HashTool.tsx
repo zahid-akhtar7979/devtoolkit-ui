@@ -13,6 +13,7 @@ import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
 import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const HashTool: React.FC = () => {
   const [text, setText] = useState('');
@@ -93,7 +94,7 @@ const HashTool: React.FC = () => {
 
         {hashApi.error && (
           <Alert severity="error" sx={{ mt: 2 }}>
-            {hashApi.error}
+            {getErrorMessage(hashApi.error)}
           </Alert>
         )}
       </ProfessionalCard>

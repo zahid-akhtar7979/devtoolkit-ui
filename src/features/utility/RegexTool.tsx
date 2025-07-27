@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   TextField,
   FormControl,
   InputLabel,
@@ -16,91 +12,113 @@ import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { validation } from '../../utils/validation';
+import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
+import { getErrorMessage } from '../../utils/errorHandling';
 
 const RegexTool: React.FC = () => {
   const [pattern, setPattern] = useState('');
-  const [testText, setTestText] = useState('');
+  const [text, setText] = useState('');
+  const [operation, setOperation] = useState('test');
 
   const regexApi = useApi(utilityService.testRegex);
 
   const handleTest = () => {
-    if (!validation.isNotEmpty(pattern) || !validation.isNotEmpty(testText)) {
+    if (!validation.isNotEmpty(pattern) || !validation.isNotEmpty(text)) {
       return;
     }
-    regexApi.execute({ text: testText, format: pattern });
+    regexApi.execute({ text, format: pattern });
   };
 
   const handleClear = () => {
     setPattern('');
-    setTestText('');
+    setText('');
     regexApi.reset();
   };
 
   const handleSample = () => {
-    setPattern('[a-zA-Z]+');
-    setTestText('Hello World 123 Test');
+    setPattern('\\b\\w+@\\w+\\.\\w+\\b');
+    setText('Contact us at john@example.com or support@company.org for assistance.');
+    setOperation('test');
   };
 
+  const operations = [
+    { value: 'test', label: 'Test Pattern' },
+    { value: 'match', label: 'Find Matches' },
+    { value: 'replace', label: 'Replace Matches' },
+  ];
+
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Regex Tester
-      </Typography>
-      
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <TextField
-            fullWidth
-            label="Regex Pattern"
-            value={pattern}
-            onChange={(e) => setPattern(e.target.value)}
-            placeholder="e.g., [a-zA-Z]+"
-            sx={{ mb: 2 }}
-          />
+    <ProfessionalToolLayout 
+      title="Regular Expression Tester"
+      description="Test and validate regular expressions with real-time matching and replacement"
+    >
+      <ProfessionalCard title="Input">
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel>Operation</InputLabel>
+          <Select
+            value={operation}
+            label="Operation"
+            onChange={(e) => setOperation(e.target.value)}
+          >
+            {operations.map((op) => (
+              <MenuItem key={op.value} value={op.value}>
+                {op.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-          <TextField
-            fullWidth
-            multiline
-            rows={6}
-            label="Test Text"
-            value={testText}
-            onChange={(e) => setTestText(e.target.value)}
-            placeholder="Enter text to test against the regex pattern"
-            sx={{ mb: 2 }}
-          />
+        <TextField
+          fullWidth
+          label="Regular Expression Pattern"
+          value={pattern}
+          onChange={(e) => setPattern(e.target.value)}
+          placeholder="e.g., \\b\\w+@\\w+\\.\\w+\\b"
+          sx={{ mb: 2 }}
+        />
 
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <LoadingButton
-              variant="contained"
-              loading={regexApi.loading}
-              onClick={handleTest}
-              disabled={!validation.isNotEmpty(pattern) || !validation.isNotEmpty(testText)}
-            >
-              Test Regex
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleSample}
-            >
-              Load Sample
-            </LoadingButton>
-            <LoadingButton
-              variant="outlined"
-              loading={false}
-              onClick={handleClear}
-            >
-              Clear
-            </LoadingButton>
-          </Box>
+        <TextField
+          fullWidth
+          multiline
+          rows={6}
+          label="Test Text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Enter text to test against the regex pattern..."
+          sx={{ mb: 2 }}
+        />
 
-          {regexApi.error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {regexApi.error}
-            </Alert>
-          )}
-        </CardContent>
-      </Card>
+        <ProfessionalButtonGroup>
+          <LoadingButton
+            variant="contained"
+            loading={regexApi.loading}
+            onClick={handleTest}
+            disabled={!validation.isNotEmpty(pattern) || !validation.isNotEmpty(text)}
+          >
+            Test Regex
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleSample}
+          >
+            Load Sample
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            loading={false}
+            onClick={handleClear}
+          >
+            Clear
+          </LoadingButton>
+        </ProfessionalButtonGroup>
+
+        {regexApi.error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {getErrorMessage(regexApi.error)}
+          </Alert>
+        )}
+      </ProfessionalCard>
 
       {regexApi.data && (
         <ResultCard
@@ -108,7 +126,7 @@ const RegexTool: React.FC = () => {
           content={regexApi.data.result || 'No result'}
         />
       )}
-    </Box>
+    </ProfessionalToolLayout>
   );
 };
 
