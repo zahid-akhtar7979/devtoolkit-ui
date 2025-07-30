@@ -6,4 +6,5 @@ export { cronService } from './cronService';
 export { utilityService } from './utilityService';
 export { diffService } from './diffService';
 export { imageToPdfService } from './imageToPdfService';
+export { uuidService } from './uuidService';
 export { default as apiClient } from './api'; 

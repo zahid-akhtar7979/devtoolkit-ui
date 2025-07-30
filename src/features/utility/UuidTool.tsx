@@ -7,33 +7,54 @@ import {
   MenuItem,
   Alert,
 } from '@mui/material';
-import { utilityService } from '../../services/utilityService';
+import { uuidService } from '../../services/uuidService';
 import { useApi } from '../../hooks/useApi';
 import { ResultCard } from '../../shared/components/ResultCard';
 import { LoadingButton } from '../../shared/components/LoadingButton';
 import { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from '../../shared/components/ProfessionalToolLayout';
 import { getErrorMessage } from '../../utils/errorHandling';
+import { UuidResponse } from '../../types';
 
 const UuidTool: React.FC = () => {
   const [count, setCount] = useState(1);
   const [type, setType] = useState('v4');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<UuidResponse | null>(null);
 
-  const uuidApi = useApi(utilityService.generateUuid);
-
-  const handleGenerate = () => {
-    uuidApi.execute({ type, count: 1 });
+  const handleGenerate = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await uuidService.generate({ type, count: 1 });
+      setResult(response);
+    } catch (err: any) {
+      setError(err.message || 'Failed to generate UUID');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClear = () => {
-    uuidApi.reset();
+    setResult(null);
+    setError(null);
   };
 
   const handleGenerateMultiple = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      await uuidApi.execute({ type, count });
-    } catch (error) {
-      console.error('Error generating UUID:', error);
-      // Error is already handled by the useApi hook
+      const response = await uuidService.generateMultiple({ type, count });
+      setResult(response);
+      
+      // Show a warning if fallback method was used
+      if (response.message?.includes('fallback method')) {
+        console.warn('Multiple UUID generation used fallback method - backend endpoint may not be available');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to generate UUIDs');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,7 +91,7 @@ const UuidTool: React.FC = () => {
         <ProfessionalButtonGroup>
           <LoadingButton
             variant="contained"
-            loading={uuidApi.loading}
+            loading={loading}
             onClick={count === 1 ? handleGenerate : handleGenerateMultiple}
           >
             Generate {count === 1 ? 'UUID' : `${count} UUIDs`}
@@ -84,20 +105,20 @@ const UuidTool: React.FC = () => {
           </LoadingButton>
         </ProfessionalButtonGroup>
 
-        {uuidApi.error && (
+        {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
-            {getErrorMessage(uuidApi.error)}
+            {error}
           </Alert>
         )}
       </ProfessionalCard>
 
-      {uuidApi.data && (
+      {result && (
         <ResultCard
           title={`Generated UUID${count > 1 ? 's' : ''} (${type.toUpperCase()})`}
           content={
-            uuidApi.data.uuids ? 
-              uuidApi.data.uuids.join('\n') : 
-              uuidApi.data.uuid || 'No UUID generated'
+            result.uuids ? 
+              result.uuids.join('\n') : 
+              result.uuid || 'No UUID generated'
           }
         />
       )}

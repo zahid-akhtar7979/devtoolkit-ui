@@ -3,32 +3,34 @@ import { JwtRequest, JwtResponse } from '../types';
 
 export const jwtService = {
   decode: async (request: JwtRequest): Promise<JwtResponse> => {
-    const response = await apiClient.post('/jwt/decode', request);
+    const response = await apiClient.post('/jwt/decode', { payload: request });
     const data = response.data;
     
-    // If the backend returns success: false, throw an error to trigger error handling
-    if (data.success === false) {
-      const error = new Error(data.error || 'JWT decode failed');
+    // If the backend returns status: ERROR, throw an error to trigger error handling
+    if (data.status === 'ERROR') {
+      const error = new Error(data.error?.message || 'JWT decode failed');
       // Attach the full response data to the error for detailed error handling
       (error as any).response = { data };
       throw error;
     }
     
-    return data;
+    // Handle the specific response structure with 'data' field
+    return data.data || data.result;
   },
 
   verify: async (request: JwtRequest): Promise<JwtResponse> => {
-    const response = await apiClient.post('/jwt/verify', request);
+    const response = await apiClient.post('/jwt/verify', { payload: request });
     const data = response.data;
     
-    // If the backend returns success: false, throw an error to trigger error handling
-    if (data.success === false) {
-      const error = new Error(data.error || 'JWT verification failed');
+    // If the backend returns status: ERROR, throw an error to trigger error handling
+    if (data.status === 'ERROR') {
+      const error = new Error(data.error?.message || 'JWT verification failed');
       // Attach the full response data to the error for detailed error handling
       (error as any).response = { data };
       throw error;
     }
     
-    return data;
+    // Handle the specific response structure with 'data' field
+    return data.data || data.result;
   },
 }; 

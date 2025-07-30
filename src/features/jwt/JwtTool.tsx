@@ -65,6 +65,11 @@ const JwtTool: React.FC = () => {
   const currentApi = operation === 'decode' ? decodeApi : verifyApi;
   const result = currentApi.data;
   
+  // Debug logging
+  if (result) {
+    console.log('JWT result:', result);
+  }
+  
   // Get error information
   const getErrorData = () => {
     if (currentApi.error) {
@@ -221,7 +226,7 @@ const JwtTool: React.FC = () => {
               {operation === 'decode' ? 'Decoded Token' : 'Verification Result'}
             </Typography>
             
-            {operation === 'decode' && result.decoded && (
+            {operation === 'decode' && (result.header || result.payload || result.decoded) && (
               <>
                 <Accordion defaultExpanded>
                   <AccordionSummary expandIcon={<ExpandMore />}>
@@ -229,7 +234,7 @@ const JwtTool: React.FC = () => {
                   </AccordionSummary>
                   <AccordionDetails>
                     <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                      {JSON.stringify(result.decoded.header, null, 2)}
+                      {JSON.stringify(result.header || result.decoded?.header, null, 2)}
                     </pre>
                   </AccordionDetails>
                 </Accordion>
@@ -240,7 +245,7 @@ const JwtTool: React.FC = () => {
                   </AccordionSummary>
                   <AccordionDetails>
                     <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                      {JSON.stringify(result.decoded.payload, null, 2)}
+                      {JSON.stringify(result.payload || result.decoded?.payload, null, 2)}
                     </pre>
                   </AccordionDetails>
                 </Accordion>
@@ -251,7 +256,7 @@ const JwtTool: React.FC = () => {
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography variant="body2" sx={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>
-                      {result.decoded.signature}
+                      {result.signature || result.decoded?.signature}
                     </Typography>
                   </AccordionDetails>
                 </Accordion>

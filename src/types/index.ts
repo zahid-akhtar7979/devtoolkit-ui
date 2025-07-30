@@ -1,18 +1,26 @@
 // API Response types
 export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  error?: string;
+  status: 'SUCCESS' | 'ERROR';
+  result?: T;
+  error?: {
+    code: string;
+    message: string;
+  };
 }
 
 // Base64 types
 export interface Base64Request {
   text: string;
+  operation: 'encode' | 'decode';
 }
 
 export interface Base64Response {
-  encoded?: string;
-  decoded?: string;
+  encodedText?: string;
+  decodedText?: string;
+  originalText?: string;
+  operation?: string;
+  success?: boolean;
+  message?: string;
 }
 
 // Hash types
@@ -22,9 +30,13 @@ export interface HashRequest {
 }
 
 export interface HashResponse {
-  hash?: string;
+  originalText?: string;
   algorithm?: string;
-  hashes?: Record<string, string>;
+  hash?: string;
+  specificHash?: string;
+  hashes?: Record<string, string> | null;
+  success?: boolean;
+  message?: string;
 }
 
 // JWT types
@@ -34,56 +46,89 @@ export interface JwtRequest {
 }
 
 export interface JwtResponse {
+  header?: any;
+  payload?: any;
+  signature?: string;
+  valid?: boolean;
+  claims?: any;
+  success?: boolean;
+  message?: string;
+  // Legacy support for old nested structure
   decoded?: {
     header: any;
     payload: any;
     signature: string;
   };
-  valid?: boolean;
-  success?: boolean;
-  error?: string;
-  errorCode?: string;
-  technicalError?: string;
 }
 
 // Jasypt types
 export interface JasyptRequest {
   text: string;
   password: string;
-  algorithm?: string;
+  algorithm: string;
 }
 
 export interface JasyptResponse {
-  encrypted?: string;
-  decrypted?: string;
+  originalText?: string;
+  encryptedText?: string;
+  decryptedText?: string;
+  algorithm?: string;
+  success?: boolean;
+  message?: string;
 }
 
 // Cron types
 export interface CronRequest {
-  cronExpression: string;
+  expression: string;
+  count?: number;
 }
 
 export interface CronResponse {
-  nextExecutions: string[];
-  description: string;
+  cronExpression?: string;
+  nextExecutions?: string[];
+  description?: string;
+  valid?: boolean;
+  success?: boolean;
+  message?: string;
+}
+
+// UUID types
+export interface UuidRequest {
+  type?: string;
+  count?: number;
+}
+
+export interface UuidResponse {
+  type?: string;
+  uuid?: string | null;
+  uuids?: string[];
+  count?: number;
+  success?: boolean;
+  message?: string;
 }
 
 // Utility types
 export interface UtilityRequest {
   text?: string;
+  operation?: 'encode' | 'decode';
+  encoding?: string;
   type?: string;
-  format?: string;
+  count?: number;
   sourceFormat?: string;
   targetFormat?: string;
+  timestamp?: string;
   url?: string;
   method?: string;
-  headers?: string;
+  headers?: Record<string, string>;
   body?: string;
   text1?: string;
   text2?: string;
   sql?: string;
   dialect?: string;
-  count?: number;
+  pattern?: string;
+  testText?: string;
+  diffType?: string;
+  contextLines?: number;
 }
 
 // Enhanced Diff types
@@ -165,19 +210,48 @@ export interface DiffResponse {
 }
 
 export interface UtilityResponse {
-  encoded?: string;
-  decoded?: string;
-  uuid?: string;
-  uuids?: string[];
-  count?: number;
-  converted?: string;
-  identical?: boolean;
-  length1?: number;
-  length2?: number;
-  differences?: string;
-  curl?: string;
-  formatted?: string;
-  result?: string;
+  // URL Encoder/Decoder
+  originalText?: string;
+  encodedText?: string;
+  decodedText?: string;
+  operation?: string;
+  encoding?: string;
+  
+
+  
+  // Timestamp Converter
+  originalTimestamp?: string;
+  timestampSourceFormat?: string;
+  timestampTargetFormat?: string;
+  convertedTimestamp?: string;
+  
+  // Format Converter
+  originalFormatText?: string;
+  formatSourceFormat?: string;
+  formatTargetFormat?: string;
+  convertedText?: string;
+  
+  // cURL Generator
+  curlCommand?: string;
+  
+  // SQL Formatter
+  originalSql?: string;
+  formattedSql?: string;
+  dialect?: string;
+  
+  // Regex Tester
+  pattern?: string;
+  testText?: string;
+  matches?: Array<{
+    match: string;
+    start: number;
+    end: number;
+  }>;
+  matchCount?: number;
+  
+  // Common
+  success?: boolean;
+  message?: string;
 }
 
 // Navigation types

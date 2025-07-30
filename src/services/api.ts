@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { API_BASE_URL } from '../constants/navigation';
+import { ApiErrorHandler, StandardizedApiError } from '../utils/apiErrorHandling';
 
 // Create axios instance with default configuration
 const apiClient: AxiosInstance = axios.create({
@@ -27,18 +28,29 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Handle common errors (401, 403, 500, etc.)
-    if (error.response?.status === 401) {
-      // Handle unauthorized
-      console.error('Unauthorized access');
-    } else if (error.response?.status === 403) {
-      // Handle forbidden
-      console.error('Access forbidden');
-    } else if (error.response?.status >= 500) {
-      // Handle server errors
-      console.error('Server error occurred');
+    // Use the new error handler
+    const apiError = ApiErrorHandler.handleError(error);
+    
+    // Log the error for debugging
+    console.error('API Error:', apiError);
+    
+    // Handle specific error codes
+    switch (apiError.code) {
+      case 'JWT_TOKEN_EXPIRED':
+      case 'JWT_INVALID_SIGNATURE':
+        console.error('JWT authentication error:', apiError.message);
+        break;
+      case 'NETWORK_ERROR':
+        console.error('Network connectivity issue:', apiError.message);
+        break;
+      case 'VALIDATION_ERROR':
+        console.error('Input validation failed:', apiError.message);
+        break;
+      default:
+        console.error('API error occurred:', apiError.message);
     }
-    return Promise.reject(error);
+    
+    return Promise.reject(apiError);
   }
 );
 

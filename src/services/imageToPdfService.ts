@@ -7,25 +7,14 @@ export interface ImageToPdfRequest {
 }
 
 export interface ImageToPdfResponse {
-  success: boolean;
-  error?: string;
-  message?: string;
-  // Flat structure properties (if response contains them directly)
   pdfContent?: string;
   fileName?: string;
   fileSize?: number;
   totalPages?: number;
   imagesProcessed?: number;
-  // Nested structure (if response contains them in a 'data' property)
-  data?: {
-    success: boolean;
-    message?: string;
-    pdfContent?: string;
-    fileName?: string;
-    fileSize?: number;
-    totalPages?: number;
-    imagesProcessed?: number;
-  };
+  pageSize?: string;
+  success?: boolean;
+  message?: string;
 }
 
 const createFormData = (data: ImageToPdfRequest): FormData => {
@@ -48,14 +37,15 @@ const createFormData = (data: ImageToPdfRequest): FormData => {
 };
 
 export const imageToPdfService = {
-  async convertToPdf(request: ImageToPdfRequest): Promise<{ data: ImageToPdfResponse }> {
+  async convertToPdf(request: ImageToPdfRequest): Promise<ImageToPdfResponse> {
     const formData = createFormData(request);
-    const response = await apiClient.post('/image-to-pdf/convert', formData, {
+    const response = await apiClient.post('/imagetopdf/convert', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return response.data;
+    // Handle the specific response structure with 'data' field
+    return response.data.data || response.data.result;
   },
 
   // Helper method to download PDF

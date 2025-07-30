@@ -116,6 +116,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   }
 ];
 
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'https://devtoolkit-backend-production.up.railway.app/api';
-// For local development, uncomment the line below and comment the line above
-// export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8080/api'; 
+// For local development, use localhost:8080
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8080/api';
+// For production, uncomment the line below and comment the line above
+// export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'https://devtoolkit-backend-production.up.railway.app/api'; 

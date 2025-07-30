@@ -25,7 +25,10 @@ const HashTool: React.FC = () => {
     if (!validation.isNotEmpty(text)) {
       return;
     }
-    hashApi.execute({ text, algorithm: algorithm || undefined });
+    // If no algorithm is selected, don't pass algorithm parameter to get all hashes
+    const request = algorithm ? { text, algorithm } : { text };
+    console.log('Hash request:', request);
+    hashApi.execute(request);
   };
 
   const handleClear = () => {
@@ -101,7 +104,13 @@ const HashTool: React.FC = () => {
 
       {hashApi.data && (
         <>
-          {hashApi.data.hash ? (
+          {console.log('Hash response data:', hashApi.data)}
+          {hashApi.data.specificHash ? (
+            <ResultCard
+              title={`${hashApi.data.algorithm} Hash`}
+              content={hashApi.data.specificHash}
+            />
+          ) : hashApi.data.hash ? (
             <ResultCard
               title={`${hashApi.data.algorithm} Hash`}
               content={hashApi.data.hash}
@@ -114,7 +123,12 @@ const HashTool: React.FC = () => {
                 content={String(hash)}
               />
             ))
-          ) : null}
+          ) : (
+            <ResultCard
+              title="Hash Result"
+              content="No hash data available"
+            />
+          )}
         </>
       )}
     </ProfessionalToolLayout>
