@@ -37,7 +37,7 @@ import {
   Merge,
   TextFields
 } from '@mui/icons-material';
-import { TOOLS_METADATA, TOOL_CATEGORIES } from '../../constants/tools';
+import { TOOLS_METADATA, TOOL_CATEGORIES } from '../constants/tools';
 
 interface ToolSelectorProps {
   open: boolean;

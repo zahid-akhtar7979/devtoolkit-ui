@@ -15,7 +15,7 @@ import {
   Apps as AppsIcon
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { TOOLS_METADATA } from '../../constants/tools';
+import { TOOLS_METADATA } from '../constants/tools';
 
 interface ToolHeaderProps {
   title?: string;

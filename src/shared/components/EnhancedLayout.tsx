@@ -29,28 +29,28 @@ import { SearchBar } from './SearchBar';
 import { ToolCard } from './ToolCard';
 import { ToolHeader } from './ToolHeader';
 import { ToolSelector } from './ToolSelector';
-import { TOOLS_METADATA, getTopTools, getToolsByCategory, TOOL_CATEGORIES, getHighlightedTools } from '../../constants/tools';
-import { useSearch } from '../../hooks/useSearch';
-import { useUserPreferences } from '../../hooks/useUserPreferences';
-import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
+import { TOOLS_METADATA, getTopTools, getToolsByCategory, TOOL_CATEGORIES, getHighlightedTools } from '../constants/tools';
+import { useSearch } from '../hooks/useSearch';
+import { useUserPreferences } from '../hooks/useUserPreferences';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 // Import feature components
-import Base64Tool from '../../features/base64/Base64Tool';
-import HashTool from '../../features/hash/HashTool';
-import JwtTool from '../../features/jwt/JwtTool';
-import JasyptTool from '../../features/jasypt/JasyptTool';
-import UrlTool from '../../features/utility/UrlTool';
-import UuidTool from '../../features/utility/UuidTool';
-import TimestampTool from '../../features/utility/TimestampTool';
-import ImageTool from '../../features/image/ImageTool';
-import RegexTool from '../../features/utility/RegexTool';
-import ConverterTool from '../../features/utility/ConverterTool';
-import AdvancedDiffTool from '../../features/diff/DiffTool';
-import CronTool from '../../features/cron/CronTool';
-import ImageCompressorTool from '../../features/compressor/ImageCompressorTool';
-import SqlTool from '../../features/utility/SqlTool';
-import ImageToPdfTool from '../../features/imagetopdf/ImageToPdfTool';
-import PdfMergerTool from '../../features/utility/PdfMergerTool';
+import Base64Tool from '../../features/base64/components/Base64Tool';
+import HashTool from '../../features/hash/components/HashTool';
+import JwtTool from '../../features/jwt/components/JwtTool';
+import JasyptTool from '../../features/jasypt/components/JasyptTool';
+import UrlTool from '../../features/url/components/UrlTool';
+import UuidTool from '../../features/uuid/components/UuidTool';
+import TimestampTool from '../../features/timestamp/components/TimestampTool';
+import ImageTool from '../../features/image/components/ImageTool';
+import RegexTool from '../../features/regex/components/RegexTool';
+import ConverterTool from '../../features/converter/components/ConverterTool';
+import AdvancedDiffTool from '../../features/diff/components/DiffTool';
+import CronTool from '../../features/cron/components/CronTool';
+import ImageCompressorTool from '../../features/compressor/components/ImageCompressorTool';
+import SqlTool from '../../features/sql/components/SqlTool';
+import ImageToPdfTool from '../../features/imagetopdf/components/ImageToPdfTool';
+import PdfMergerTool from '../../features/pdfmerger/components/PdfMergerTool';
 
 interface SectionProps {
   title: string;
