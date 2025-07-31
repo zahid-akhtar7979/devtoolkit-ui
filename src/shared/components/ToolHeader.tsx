@@ -16,6 +16,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { TOOLS_METADATA } from '../constants/tools';
+import { Logo } from './Logo';
 
 interface ToolHeaderProps {
   title?: string;
@@ -86,8 +87,8 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({
               }
             }}
           >
-            <HomeIcon sx={{ fontSize: 16 }} />
-            Home
+            <Logo size="small" />
+            The Tool Arc
           </Link>
           <Link
             color="inherit"
@@ -108,7 +109,7 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({
             }}
           >
             <AppsIcon sx={{ fontSize: 16 }} />
-            Tools
+            Home
           </Link>
           <Typography color="text.primary" sx={{ display: 'flex', alignItems: 'center' }}>
             {displayTitle}
@@ -130,26 +131,29 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({
             <ArrowBackIcon />
           </IconButton>
           
-          <Box sx={{ flex: 1 }}>
-            <Typography 
-              variant="h4" 
-              sx={{ 
-                fontWeight: 700, 
-                fontSize: { xs: '1.5rem', sm: '2rem' },
-                mb: 0.5
-              }}
-            >
-              {displayTitle}
-            </Typography>
-            {displayDescription && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
+            <Logo size="xlarge" />
+            <Box>
               <Typography 
-                variant="body1" 
-                color="text.secondary"
-                sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                variant="h4" 
+                sx={{ 
+                  fontWeight: 700, 
+                  fontSize: { xs: '1.5rem', sm: '2rem' },
+                  mb: 0.5
+                }}
               >
-                {displayDescription}
+                {displayTitle}
               </Typography>
-            )}
+              {displayDescription && (
+                <Typography 
+                  variant="body1" 
+                  color="text.secondary"
+                  sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                >
+                  {displayDescription}
+                </Typography>
+              )}
+            </Box>
           </Box>
         </Box>
       </Container>

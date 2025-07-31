@@ -29,6 +29,7 @@ import { SearchBar } from './SearchBar';
 import { ToolCard } from './ToolCard';
 import { ToolHeader } from './ToolHeader';
 import { ToolSelector } from './ToolSelector';
+import { Logo } from './Logo';
 import { TOOLS_METADATA, getTopTools, getToolsByCategory, TOOL_CATEGORIES, getHighlightedTools } from '../constants/tools';
 import { useSearch } from '../hooks/useSearch';
 import { useUserPreferences } from '../hooks/useUserPreferences';
@@ -274,26 +275,32 @@ export const EnhancedLayout: React.FC = () => {
           }}
         >
           <Container maxWidth="xl">
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, mb: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Logo size="xlarge" />
+                <Box>
+                  <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '2rem' } }}>
+                    The Tool Arc
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Fast, Free & Built for Everyone
+                  </Typography>
+                </Box>
+              </Box>
+              <Box sx={{ flex: 1 }} />
               <IconButton
                 onClick={handleToolSelectorOpen}
                 sx={{
-                  p: 1,
+                  p: 1.5,
+                  alignSelf: 'flex-start',
+                  mt: 0.5,
                   '&:hover': {
                     bgcolor: alpha(theme.palette.primary.main, 0.1),
                   }
                 }}
               >
-                <AppsIcon sx={{ fontSize: 32, color: 'primary.main' }} />
+                <AppsIcon sx={{ fontSize: 44, color: 'primary.main' }} />
               </IconButton>
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '2rem' } }}>
-                  Dev Toolkit
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  essential developer tools
-                </Typography>
-              </Box>
             </Box>
 
             <SearchBar

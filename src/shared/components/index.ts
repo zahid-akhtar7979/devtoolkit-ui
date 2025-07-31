@@ -7,4 +7,5 @@ export { SearchBar } from './SearchBar';
 export { ToolCard } from './ToolCard';
 export { ToolHeader } from './ToolHeader';
 export { ToolSelector } from './ToolSelector';
-export { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from './ProfessionalToolLayout'; 
+export { ProfessionalToolLayout, ProfessionalCard, ProfessionalButtonGroup } from './ProfessionalToolLayout';
+export { Logo } from './Logo'; 
