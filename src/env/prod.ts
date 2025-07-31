@@ -1,5 +1,5 @@
 export const prodConfig = {
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'https://api.devtoolkit.com/api',
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'https://devtoolkit-backend-production.up.railway.app/api',
   environment: 'production',
   debug: false,
   features: {
