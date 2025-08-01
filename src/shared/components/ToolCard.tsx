@@ -35,7 +35,7 @@ import {
   Merge,
   TextFields
 } from '@mui/icons-material';
-import { ToolMetadata } from '../../constants/tools';
+import { ToolMetadata } from '../constants/tools';
 
 interface ToolCardProps {
   tool: ToolMetadata;

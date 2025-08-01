@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, ButtonProps } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { useClipboard } from '../../hooks/useClipboard';
+import { useClipboard } from '../hooks/useClipboard';
 
 interface CopyButtonProps extends Omit<ButtonProps, 'onClick'> {
   text: string;
