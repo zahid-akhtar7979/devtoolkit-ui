@@ -127,7 +127,7 @@ const JasyptTool: React.FC = () => {
       {result && (
         <ResultCard
           title={`${operation === 'encrypt' ? 'Encrypted' : 'Decrypted'} Result`}
-          content={operation === 'encrypt' ? result.encryptedText || '' : result.decryptedText || ''}
+          content={result.processedText || ''}
         />
       )}
     </ProfessionalToolLayout>

@@ -8,9 +8,10 @@ interface JasyptRequest {
 
 interface JasyptResponse {
   originalText: string;
-  encryptedText?: string;
-  decryptedText?: string;
+  processedText: string;
+  password: string;
   algorithm: string;
+  operation: string;
   success: boolean;
   message: string;
 }
