@@ -167,27 +167,10 @@ const ConverterTool: React.FC = () => {
 
       {/* Result Section */}
       {converterApi.data && (
-        <Card sx={{ mb: 3 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              {getFormatIcon(targetFormat)} Output ({targetFormat.toUpperCase()})
-            </Typography>
-            <TextField
-              fullWidth
-              multiline
-              rows={12}
-              value={converterApi.data.convertedText || 'No result'}
-              InputProps={{
-                readOnly: true,
-                style: {
-                  fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
-                  fontSize: '14px',
-                  lineHeight: 1.5,
-                }
-              }}
-            />
-          </CardContent>
-        </Card>
+        <ResultCard
+          title={`${getFormatIcon(targetFormat)} Output (${targetFormat.toUpperCase()})`}
+          content={converterApi.data.convertedText || 'No result'}
+        />
       )}
     </ProfessionalToolLayout>
   );
